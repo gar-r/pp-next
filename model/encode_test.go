@@ -1,4 +1,4 @@
-package main
+package model
 
 import "testing"
 
@@ -6,13 +6,13 @@ func Test_Encode_Decode(t *testing.T) {
 	r := NewRoom("test")
 
 	// encode
-	reader, err := encode(r)
+	reader, err := Encode(r)
 	if err != nil {
 		t.Error(err)
 	}
 
 	// decode
-	s, err := decode(reader)
+	s, err := Decode(reader)
 	if err != nil {
 		t.Error(err)
 	}

@@ -1,8 +1,10 @@
-package main
+package store
 
 import (
 	"os"
 	"testing"
+
+	"okki.hu/garric/ppnext/model"
 )
 
 func Test_FsRepository_RoomPath(t *testing.T) {
@@ -11,7 +13,7 @@ func Test_FsRepository_RoomPath(t *testing.T) {
 	expected := "test/demo"
 
 	t.Run("no ending path separator", func(t *testing.T) {
-		r := NewFsRepository("test")
+		r := NewFs("test")
 		p := r.getRoomPath(name)
 		if p != expected {
 			t.Errorf("expected %s, got %s", expected, p)
@@ -19,7 +21,7 @@ func Test_FsRepository_RoomPath(t *testing.T) {
 	})
 
 	t.Run("with ending path separator", func(t *testing.T) {
-		r := NewFsRepository("test" + string(os.PathSeparator))
+		r := NewFs("test" + string(os.PathSeparator))
 		p := r.getRoomPath(name)
 		if p != expected {
 			t.Errorf("expected %s, got %s", expected, p)
@@ -31,8 +33,8 @@ func Test_FsRepository_RoomPath(t *testing.T) {
 func Test_FsRepository_SaveLoad(t *testing.T) {
 
 	name := "test"
-	repo := NewFsRepository(os.TempDir())
-	r1 := NewRoom(name)
+	repo := NewFs(os.TempDir())
+	r1 := model.NewRoom(name)
 
 	err := repo.Save(r1)
 	if err != nil {
