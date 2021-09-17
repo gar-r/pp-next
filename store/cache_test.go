@@ -10,9 +10,10 @@ import (
 func Test_Cache_Load(t *testing.T) {
 
 	repo := &testRepository{}
-	cache := NewCache(repo)
 
 	t.Run("cache miss, followed by cache hit", func(t *testing.T) {
+		cache := NewCache(repo)
+
 		// first call to Load results in a cache miss:
 		room := repo.StubRoom("test")
 
@@ -33,6 +34,7 @@ func Test_Cache_Load(t *testing.T) {
 	})
 
 	t.Run("error propagation", func(t *testing.T) {
+		cache := NewCache(repo)
 		testErr := errors.New("test")
 		repo.Err = testErr
 
@@ -49,9 +51,10 @@ func Test_Cache_Load(t *testing.T) {
 func Test_Cache_Save(t *testing.T) {
 
 	repo := &testRepository{}
-	cache := NewCache(repo)
 
 	t.Run("save invalidates the cache", func(t *testing.T) {
+		cache := NewCache(repo)
+
 		room := repo.StubRoom("A")
 
 		// first let the room be cached
@@ -71,6 +74,7 @@ func Test_Cache_Save(t *testing.T) {
 	})
 
 	t.Run("error propagation", func(t *testing.T) {
+		cache := NewCache(repo)
 		testErr := errors.New("test")
 		repo.Err = testErr
 
@@ -86,9 +90,10 @@ func Test_Cache_Save(t *testing.T) {
 func Test_Cache_Delete(t *testing.T) {
 
 	repo := &testRepository{}
-	cache := NewCache(repo)
 
 	t.Run("delete invalidates cache", func(t *testing.T) {
+		cache := NewCache(repo)
+
 		repo.StubRoom("A")
 
 		// first let the room be cached
@@ -108,6 +113,7 @@ func Test_Cache_Delete(t *testing.T) {
 	})
 
 	t.Run("error propagation", func(t *testing.T) {
+		cache := NewCache(repo)
 		testErr := errors.New("test")
 		repo.Err = testErr
 
@@ -144,6 +150,43 @@ func Test_Cache_Invalidate(t *testing.T) {
 
 }
 
+func Test_Cache_Exists(t *testing.T) {
+
+	repo := &testRepository{}
+
+	t.Run("user exists in cache", func(t *testing.T) {
+		cache := NewCache(repo)
+		room := repo.StubRoom("test")
+		room.RegisterVote(&model.Vote{
+			User: "user",
+			Vote: 5,
+		})
+
+		// load room into cache
+		cache.Load("test")
+		exists, _ := cache.Exists("user")
+
+		if !exists {
+			t.Errorf("expected user to exist")
+		}
+	})
+
+	t.Run("user exists in repo only", func(t *testing.T) {
+		cache := NewCache(repo)
+		room := repo.StubRoom("test")
+		room.RegisterVote(&model.Vote{
+			User: "user",
+			Vote: 5,
+		})
+
+		exists, _ := cache.Exists("user")
+		if !exists {
+			t.Errorf("expected user to exist")
+		}
+	})
+
+}
+
 type testRepository struct {
 	Room *model.Room
 	Err  error
@@ -165,4 +208,8 @@ func (r *testRepository) Save(room *model.Room) error {
 
 func (r *testRepository) Delete(name string) error {
 	return r.Err
+}
+
+func (r *testRepository) Exists(user string) (bool, error) {
+	return true, nil
 }

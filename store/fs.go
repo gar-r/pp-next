@@ -19,6 +19,10 @@ func NewFs(rootPath string) *Fs {
 	if rootPath[last] != os.PathSeparator {
 		rootPath += string(os.PathSeparator)
 	}
+	err := os.MkdirAll(rootPath, os.ModePerm)
+	if err != nil {
+		panic(err)
+	}
 	return &Fs{
 		rootPath: rootPath,
 	}
@@ -62,6 +66,32 @@ func (r *Fs) Delete(name string) error {
 	defer r.mux.Unlock()
 	path := r.getRoomPath(name)
 	return os.Remove(path)
+}
+
+// Exists scans every room file in the root path, and checks
+// if the given user is present in any of them.
+// This is a slow operation, since it has to scan all rooms.
+func (r *Fs) Exists(user string) (bool, error) {
+	p, err := os.Open(r.rootPath)
+	if err != nil {
+		return false, err
+	}
+	files, err := p.Readdirnames(0)
+	if err != nil {
+		return false, err
+	}
+	for _, f := range files {
+		room, err := r.Load(f)
+		if err != nil {
+			return false, err
+		}
+		for u := range room.Votes {
+			if u == user {
+				return true, nil
+			}
+		}
+	}
+	return false, nil
 }
 
 func (r *Fs) getRoomPath(name string) string {

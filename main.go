@@ -2,16 +2,31 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"okki.hu/garric/ppnext/config"
+	"okki.hu/garric/ppnext/controller"
+	"okki.hu/garric/ppnext/mw"
 )
-
-const addr = ":38080"
 
 func main() {
 	r := gin.Default()
-	setupHandlers(r)
-	r.Run(addr)
-}
 
-func setupHandlers(r *gin.Engine) {
-	r.GET("/rooms/:name", getRoom)
+	r.StaticFile("/favicon.ico", "./assets/favicon.ico")
+	r.LoadHTMLGlob("templates/*")
+
+	r.Use(mw.Auth())
+
+	// public routes
+	r.GET("/login", controller.ShowLogin)
+	r.POST("/login", controller.HandleLogin)
+
+	// protected routes
+	prot := r.Group("/rooms", mw.Prot())
+	prot.GET("/:room", controller.ShowRoom)
+
+	active := prot.Group("/", mw.Active())
+	active.POST("/:room/:vote", nil) // post vote
+	active.POST("/:room/show", nil)  // show votes
+	active.POST("/:room/next", nil)  // next story
+
+	r.Run(config.Addr)
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+{{ template "head.html" . }}
+
+<body>
+    <div class="container">
+        <h1>Hi.</h1>
+        <p>Join a planning poker room.</p>
+        <form action="/login" method="POST">
+            <div class="input-field>">
+                <label>Room</label>
+                <input id="room" type="text" name="room" value="{{ .room }}" />
+            </div>
+            <div class="input-field">
+                <label>Pick a name</label>
+                <input {{ .state }} id="name" type="text" name="name" value="{{ .name }}"
+                    class="validate {{ .valid }}" />
+                <span class="helper-text" data-error="Name already taken"></span>
+            </div>
+            <button class="btn waves-effect waves-light" type="submit" name="Join">Join
+                <i class="material-icons right">send</i>
+            </button>
+        </form>
+        <p><a href="mailto:{{ .email }}?subject=Planning Poker Next"></a></p>
+    </div>
+</body>
+
+</html>

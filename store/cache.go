@@ -48,3 +48,18 @@ func (c *Cache) Delete(name string) error {
 func (c *Cache) Invalidate(name string) {
 	delete(c.cache, name)
 }
+
+// Exists returns if a given user exists in any room.
+// Cache will first check the user in the cached rooms, this can
+// result in the user being found quickly without hitting the repository.
+// If the user is not found in the cache, we must check the repository as well.
+func (c *Cache) Exists(user string) (bool, error) {
+	for _, room := range c.cache {
+		for u := range room.Votes {
+			if u == user {
+				return true, nil
+			}
+		}
+	}
+	return c.repo.Exists(user)
+}

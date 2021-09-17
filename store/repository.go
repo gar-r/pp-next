@@ -19,4 +19,9 @@ type Repository interface {
 	// If the model.Room does not exist, nothing happens.
 	// Returns an error if there is an underlying storage problem.
 	Delete(name string) error
+
+	// Exists returns true if the given user exists in any
+	// room in the repository, or false otherwise.
+	// Returns an error if there is an underlying storage problem.
+	Exists(user string) (bool, error)
 }
