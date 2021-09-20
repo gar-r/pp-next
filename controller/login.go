@@ -28,11 +28,11 @@ func ShowLogin(c *gin.Context) {
 	// check if user is logged in
 	user, ok := c.Get("user")
 	if ok {
-		h["state"] = "readonly"
 		h["name"] = user
+		h["state"] = "readonly"
 	}
 
-	c.HTML(http.StatusOK, "join.html", h)
+	c.HTML(http.StatusOK, "login.html", h)
 }
 
 // HandleLogin checks if the user

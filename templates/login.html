@@ -15,7 +15,7 @@
             <div class="input-field">
                 <label>Pick a name</label>
                 <input {{ .state }} id="name" type="text" name="name" value="{{ .name }}"
-                    class="validate {{ .valid }}" />
+                    class="{{ .valid }}" />
                 <span class="helper-text" data-error="Name already taken"></span>
             </div>
             <button class="btn waves-effect waves-light" type="submit" name="Join">Join

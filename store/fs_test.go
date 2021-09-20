@@ -9,11 +9,12 @@ import (
 
 func Test_FsRepository_RoomPath(t *testing.T) {
 
+	path := createTempPath(t)
 	name := "demo"
-	expected := "test/demo"
+	expected := path + "/demo"
 
 	t.Run("no ending path separator", func(t *testing.T) {
-		r := NewFs("test")
+		r := NewFs(path)
 		p := r.getRoomPath(name)
 		if p != expected {
 			t.Errorf("expected %s, got %s", expected, p)
@@ -21,7 +22,7 @@ func Test_FsRepository_RoomPath(t *testing.T) {
 	})
 
 	t.Run("with ending path separator", func(t *testing.T) {
-		r := NewFs("test" + string(os.PathSeparator))
+		r := NewFs(path + string(os.PathSeparator))
 		p := r.getRoomPath(name)
 		if p != expected {
 			t.Errorf("expected %s, got %s", expected, p)
@@ -100,6 +101,7 @@ func Test_FsRepository_Exists(t *testing.T) {
 		Vote: 3,
 	})
 	repo.Save(r)
+	defer repo.Delete(r.Name)
 	ex, err = repo.Exists(user)
 	if err != nil {
 		t.Error(err)

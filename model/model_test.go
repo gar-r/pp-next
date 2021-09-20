@@ -1,6 +1,9 @@
 package model
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func TestRoom_NewRoom(t *testing.T) {
 	name := "test"
@@ -13,14 +16,19 @@ func TestRoom_NewRoom(t *testing.T) {
 func TestRoom_RegisterVote(t *testing.T) {
 	r := NewRoom("test")
 
-	v := &Vote{
-		User: "user",
-		Vote: 5,
-	}
-
+	v := NewVote("user", 5)
 	r.RegisterVote(v)
 
-	if r.Votes["user"] != 5 {
-		t.Errorf("expected %d, got %d", 5, r.Votes["user"])
+	if r.Votes["user"] != v {
+		t.Errorf("expected %v, got %v", v, r.Votes["user"])
+	}
+}
+
+func TestVote_Timestamp(t *testing.T) {
+	v := NewVote("test", 1)
+	now := time.Now()
+
+	if v.Ts.After(now) {
+		t.Errorf("new vote timestamp cannot be in the future: %v", v.Ts)
 	}
 }
