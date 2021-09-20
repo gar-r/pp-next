@@ -1,5 +1,7 @@
 package model
 
+import "time"
+
 const (
 	Nothing  = iota // did not vote (default)
 	Coffee   = iota // needs a break
@@ -28,8 +30,9 @@ func (r *Room) RegisterVote(v *Vote) {
 
 // Vote represents a single vote coming from a single user
 type Vote struct {
-	User string `json:"user"`
-	Vote int    `json:"vote"`
+	User string    `json:"user"`
+	Vote int       `json:"vote"`
+	Ts   time.Time `json:"ts"`
 }
 
 type LoginForm struct {

@@ -10,7 +10,11 @@
 
 
 <body>
-    Todo
+    {{ .room.Name }}
+    {{ range $user, $vote := .room.Votes }}
+    <li><strong>{{ $user }}</strong>: {{ $vote }}</li>
+    {{ end }}
+
 </body>
 
 </html>

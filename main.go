@@ -16,6 +16,7 @@ func main() {
 	r.Use(mw.Auth())
 
 	// public routes
+	r.GET("/", controller.ShowLogin)
 	r.GET("/login", controller.ShowLogin)
 	r.POST("/login", controller.HandleLogin)
 
