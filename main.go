@@ -25,9 +25,9 @@ func main() {
 	prot.GET("/:room", controller.ShowRoom)
 
 	active := prot.Group("/", mw.Active())
-	active.POST("/:room/:vote", nil) // post vote
-	active.POST("/:room/show", nil)  // show votes
-	active.POST("/:room/next", nil)  // next story
+	active.POST("/:room/", controller.AcceptVote)
+	active.POST("/:room/show", nil) // show votes
+	active.POST("/:room/next", nil) // next story
 
 	r.Run(config.Addr)
 }

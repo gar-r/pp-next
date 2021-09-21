@@ -54,3 +54,8 @@ type LoginQueryParams struct {
 	LoginForm
 	Valid string `form:"valid"`
 }
+
+type VoteOption struct {
+	Content string
+	Value   int
+}

@@ -1,0 +1,11 @@
+<script>
+    function vote(v) {
+        fetch("/rooms/{{ .room.Name }}/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: v
+        });
+    }
+</script>
