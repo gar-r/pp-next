@@ -5,17 +5,11 @@
 
 <body>
     {{ .room.Name }}
-    {{ range $user, $vote := .room.Votes }}
-    <li><strong>{{ $user }}</strong>: {{ $vote }}</li>
-    {{ end }}
-    <form action="#">
-        {{ range .options }}
-        {{ template "option.html" . }}
-        {{ end }}
-    </form>
+    {{ template "userlist.html" .room.Votes }}
+    {{ template "voter.html" .options }}
 
 </body>
 
-{{ template "scripts-room.html" . }}
+{{ template "scripts.html" . }}
 
 </html>

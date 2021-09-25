@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"okki.hu/garric/ppnext/config"
@@ -27,5 +26,5 @@ func AcceptVote(c *gin.Context) {
 	if err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 	}
-	c.String(http.StatusOK, strconv.Itoa(v))
+	c.Status(http.StatusOK)
 }

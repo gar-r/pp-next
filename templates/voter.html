@@ -1,0 +1,11 @@
+<form action="#">
+    {{ range . }}
+    <label>
+        <input 
+            name="votes" 
+            type="radio" 
+            onclick="vote({{ .Value }})" />
+        <span>{{ .Content }}</span>
+    </label>    
+    {{ end }}
+</form>
