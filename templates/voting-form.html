@@ -1,0 +1,22 @@
+<div class="container" style="margin-top: 6rem;">
+    <form>
+        <div class="row center-align">
+            {{ range . }}
+            <div class="col s2">
+                <div class="row left-align">
+                    <label>
+                        <input name="votes" type="radio" onchange="vote({{ .Value }})" />
+                        <span>
+                            {{ if .HasIcon }}
+                            <i class="material-icons">{{ .Icon }}</i>
+                            {{ else }}
+                            {{ .Text }}
+                            {{ end }}
+                        </span>
+                    </label>
+                </div>
+            </div>
+            {{ end }}
+        </div>
+    </form>
+</div>

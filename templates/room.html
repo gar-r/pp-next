@@ -4,9 +4,14 @@
 {{ template "head.html" . }}
 
 <body>
-    {{ .room.Name }}
-    {{ template "userlist.html" .room.Votes }}
-    {{ template "voter.html" .options }}
+    
+    <header>
+    {{ template "nav.html" . }}
+    </header>
+
+    <main style="flex: 1 0 auto">
+    {{ template "voting-form.html" .options }}
+    </main>
 
 </body>
 

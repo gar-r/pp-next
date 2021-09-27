@@ -2,13 +2,6 @@ package model
 
 import "time"
 
-const (
-	Nothing  = 100 // did not vote (default)
-	Coffee   = 101 // needs a break
-	Large    = 102 // story too large
-	Question = 103 // needs discussion
-)
-
 // Room represents a planning poker room
 type Room struct {
 	Name  string
@@ -56,6 +49,11 @@ type LoginQueryParams struct {
 }
 
 type VoteOption struct {
-	Content string
-	Value   int
+	Text  string
+	Icon  string
+	Value int
+}
+
+func (v *VoteOption) HasIcon() bool {
+	return v.Icon != ""
 }

@@ -8,6 +8,7 @@ import (
 )
 
 func ShowRoom(c *gin.Context) {
+	user := c.MustGet("user")
 	name := c.Param("room")
 	room, err := config.Repository.Load(name)
 	if err != nil {
@@ -15,6 +16,7 @@ func ShowRoom(c *gin.Context) {
 	}
 	h := gin.H{
 		"room":    room,
+		"user":    user,
 		"options": config.VoteOptions,
 	}
 	c.HTML(http.StatusOK, "room.html", h)
