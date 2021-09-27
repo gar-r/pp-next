@@ -18,6 +18,7 @@ func ShowRoom(c *gin.Context) {
 		"room":    room,
 		"user":    user,
 		"options": config.VoteOptions,
+		"support": config.Support,
 	}
 	c.HTML(http.StatusOK, "room.html", h)
 }

@@ -4,8 +4,9 @@ import "time"
 
 // Room represents a planning poker room
 type Room struct {
-	Name  string
-	Votes map[string]*Vote
+	Name     string
+	Revealed bool
+	Votes    map[string]*Vote
 }
 
 // NewRoom creates a new Room with a pre-defined name

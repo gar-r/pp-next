@@ -3,15 +3,18 @@
 
 {{ template "head.html" . }}
 
-<body>
+<body style="display: flex;min-height: 100vh;flex-direction: column;">
     
-    <header>
-    {{ template "nav.html" . }}
-    </header>
+    {{ template "header.html" . }}   
 
     <main style="flex: 1 0 auto">
-    {{ template "voting-form.html" .options }}
+        <div class="container" style="margin-top: 3rem;"></div>
+        {{ template "voting-form.html" .options }}
+        {{ template "buttons.html" }}
+        </div>
     </main>
+
+    {{ template "footer.html" . }}
 
 </body>
 
