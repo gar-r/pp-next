@@ -4,10 +4,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"okki.hu/garric/ppnext/config"
 	"okki.hu/garric/ppnext/controller"
+	"okki.hu/garric/ppnext/model"
 	"okki.hu/garric/ppnext/mw"
 )
 
 func main() {
+
+	room := model.NewRoom("demo")
+	room.RegisterVote(model.NewVote("user1", 5))
+	room.RegisterVote(model.NewVote("user2", 3))
+	room.RegisterVote(model.NewVote("user3", 2))
+	room.RegisterVote(model.NewVote("user4", 1))
+
+	config.Repository.Save(room)
+
 	r := gin.Default()
 
 	r.StaticFile("/favicon.ico", "./assets/favicon.ico")
@@ -23,6 +33,7 @@ func main() {
 	// protected routes
 	prot := r.Group("/rooms", mw.Prot())
 	prot.GET("/:room", controller.ShowRoom)
+	prot.GET("/:room/json", controller.GetRoom)
 
 	active := prot.Group("/", mw.Active())
 	active.POST("/:room/", controller.AcceptVote)

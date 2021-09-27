@@ -4,9 +4,10 @@ import "time"
 
 // Room represents a planning poker room
 type Room struct {
-	Name     string
-	Revealed bool
-	Votes    map[string]*Vote
+	Name     string           `json:"name"`
+	Revealed bool             `json:"revealed"`
+	Votes    map[string]*Vote `json:"votes"`
+	Ts       time.Time        `json:"ts"`
 }
 
 // NewRoom creates a new Room with a pre-defined name
@@ -14,6 +15,7 @@ func NewRoom(name string) *Room {
 	return &Room{
 		Name:  name,
 		Votes: make(map[string]*Vote),
+		Ts:    time.Now(),
 	}
 }
 

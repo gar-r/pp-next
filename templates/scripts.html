@@ -1,4 +1,5 @@
 <script>
+    
     function vote(v) {
         fetch("/rooms/{{ .room.Name }}/", {
             method: "POST",
@@ -8,4 +9,30 @@
             body: v
         });
     }
+
+    function sync() {
+        setInterval(function() {
+            updateTimer();
+            // TODO: sync votes
+        }, 1000);        
+    }    
+
+    function updateTimer() {
+        var start = new Date({{ .room.Ts.UnixMilli }});
+        var now = new Date();        
+        var diff = now - start;
+        var mins = Math.floor(diff / 60000);
+        var secs = Math.floor((diff/1000)%60);
+        var timer = padZero(""+mins)+":"+padZero(""+secs);
+        var elem = document.getElementById("timer");
+        elem.innerHTML = timer;
+    }
+
+    function padZero(s) {
+        if (s.length < 2) {
+            return "0" + s;
+        }
+        return s;
+    }
+    
 </script>
