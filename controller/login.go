@@ -6,8 +6,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"okki.hu/garric/ppnext/config"
+	"okki.hu/garric/ppnext/consts"
 	"okki.hu/garric/ppnext/model"
-	"okki.hu/garric/ppnext/mw"
+	"okki.hu/garric/ppnext/viewmodel"
 )
 
 // ShowLogin sends the login page template to the client, and
@@ -15,14 +16,14 @@ import (
 // is useful for pre-filling certain form fields for share URLs
 func ShowLogin(c *gin.Context) {
 
-	var qp model.LoginQueryParams
+	var qp viewmodel.LoginQueryParams
 	c.ShouldBindQuery(&qp)
 
 	h := gin.H{
 		"room":  qp.Room,
 		"name":  qp.Name,
 		"valid": qp.Valid,
-		"email": config.Support,
+		"email": consts.Support,
 	}
 
 	// check if user is logged in
@@ -38,7 +39,7 @@ func ShowLogin(c *gin.Context) {
 // HandleLogin checks if the user
 func HandleLogin(c *gin.Context) {
 
-	var form model.LoginForm
+	var form viewmodel.LoginForm
 	c.ShouldBind(&form)
 
 	// check if user is logged in
@@ -56,7 +57,7 @@ func HandleLogin(c *gin.Context) {
 		}
 
 		// set cookie with user name
-		mw.SetAuthCookie(c, form.Name)
+		SetAuthCookie(c, form.Name)
 		user = form.Name
 	}
 
@@ -70,7 +71,7 @@ func HandleLogin(c *gin.Context) {
 	if _, ok := room.Votes[name]; !ok {
 		room.RegisterVote(&model.Vote{
 			User: name,
-			Vote: config.Nothing,
+			Vote: consts.Nothing,
 		})
 	}
 	config.Repository.Save(room)

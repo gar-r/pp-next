@@ -1,4 +1,4 @@
-package mw
+package controller
 
 import (
 	"net/http"

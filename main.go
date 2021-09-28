@@ -3,9 +3,9 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"okki.hu/garric/ppnext/config"
+	"okki.hu/garric/ppnext/consts"
 	"okki.hu/garric/ppnext/controller"
 	"okki.hu/garric/ppnext/model"
-	"okki.hu/garric/ppnext/mw"
 )
 
 func main() {
@@ -23,7 +23,7 @@ func main() {
 	r.StaticFile("/favicon.ico", "./assets/favicon.ico")
 	r.LoadHTMLGlob("templates/*")
 
-	r.Use(mw.Auth())
+	r.Use(controller.Auth())
 
 	// public routes
 	r.GET("/", controller.ShowLogin)
@@ -31,14 +31,14 @@ func main() {
 	r.POST("/login", controller.HandleLogin)
 
 	// protected routes
-	prot := r.Group("/rooms", mw.Prot())
+	prot := r.Group("/rooms", controller.Prot())
 	prot.GET("/:room", controller.ShowRoom)
 	prot.GET("/:room/json", controller.GetRoom)
 
-	active := prot.Group("/", mw.Active())
+	active := prot.Group("/", controller.Active())
 	active.POST("/:room/", controller.AcceptVote)
 	active.POST("/:room/show", nil) // show votes
 	active.POST("/:room/next", nil) // next story
 
-	r.Run(config.Addr)
+	r.Run(consts.Addr)
 }

@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"okki.hu/garric/ppnext/consts"
+)
 
 // Room represents a planning poker room
 type Room struct {
@@ -19,9 +23,17 @@ func NewRoom(name string) *Room {
 	}
 }
 
-// RegisterVote makes the Room register a user Vote
+// RegisterVote makes the Room register a user Vote.
 func (r *Room) RegisterVote(v *Vote) {
 	r.Votes[v.User] = v
+}
+
+// Reset the room, clearing all the votes, but preserving
+// the name of joined users.
+func (r *Room) Reset() {
+	for name := range r.Votes {
+		r.RegisterVote(NewVote(name, consts.Nothing))
+	}
 }
 
 // Vote represents a single vote coming from a single user
@@ -32,31 +44,11 @@ type Vote struct {
 }
 
 // NewVote creates a new Vote with the given user and vote.
-// The vote is initialized to the current timestamp.
+// The vote is initialized with the current timestamp.
 func NewVote(user string, vote int) *Vote {
 	return &Vote{
 		User: user,
 		Vote: vote,
 		Ts:   time.Now(),
 	}
-}
-
-type LoginForm struct {
-	Room string `form:"room"`
-	Name string `form:"name"`
-}
-
-type LoginQueryParams struct {
-	LoginForm
-	Valid string `form:"valid"`
-}
-
-type VoteOption struct {
-	Text  string
-	Icon  string
-	Value int
-}
-
-func (v *VoteOption) HasIcon() bool {
-	return v.Icon != ""
 }
