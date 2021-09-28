@@ -18,40 +18,12 @@
     }
 
     function updateVotes() {
-        fetch("/rooms/{{ .room.Name }}/json")
-            .then(r => r.json())
-            .then(d => update(d));
-    }
-
-    function update(d) {
-        var el = document.getElementById("users");
-        el.innerHTML = "";
-        for (k in d) {
-            el.innerHTML += getUserChip(k, d[k].vote);
-        }
-    }
-
-    function getUserChip(name, value) {
-        return '<div class="chip">' + name + ': ' + value + '</div>';
-    }
-
-    function getValue(vote) {
-        return value < 100 
-            ? '<b>' + value + '</b>' 
-            : '<i class="material-icons tiny">' + getIcon(vote) + '</i>';
-    }
-
-    function getIcon(vote) {
-        {{ if .room.Revealed }}
-        switch (vote) {
-            case 101: return "coffee";
-            case 102: return "upgrade";
-            case 103: return "help";
-            default: return "nightlight_round";
-        }
-        {{ else }}
-        return vote == 100 ? "nightlight_round" : "check";
-        {{ end }}
+        fetch("/rooms/{{ .room.Name }}/userlist")
+            .then(r => r.text())
+            .then(s => {
+                var el = document.getElementById("userlist");
+                el.innerHTML = s;
+            });
     }
 
     function updateTimer() {
