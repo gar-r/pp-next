@@ -52,3 +52,23 @@ func NewVote(user string, vote int) *Vote {
 		Ts:   time.Now(),
 	}
 }
+
+// IsNothing returns if the vote value equals the const Nothing
+func (v *Vote) IsNothing() bool {
+	return v.Vote == consts.Nothing
+}
+
+// IsCoffee returns if the vote value equals the const Coffee
+func (v *Vote) IsCoffee() bool {
+	return v.Vote == consts.Coffee
+}
+
+// IsLarge returns if the vote value equals the const Large
+func (v *Vote) IsLarge() bool {
+	return v.Vote == consts.Large
+}
+
+// IsQuestion returns if the vote value equals the const Question
+func (v *Vote) IsQuestion() bool {
+	return v.Vote == consts.Question
+}

@@ -24,13 +24,13 @@ func ShowRoom(c *gin.Context) {
 	c.HTML(http.StatusOK, "room.html", h)
 }
 
-func GetRoom(c *gin.Context) {
+func UserList(c *gin.Context) {
 	name := c.Param("room")
 	room, err := config.Repository.Load(name)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 	}
-	c.JSON(http.StatusOK, room.Votes)
+	c.HTML(http.StatusOK, "user-list.html", room)
 }
 
 func AcceptVote(c *gin.Context) {
