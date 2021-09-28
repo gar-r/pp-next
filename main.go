@@ -33,7 +33,7 @@ func main() {
 	// protected routes
 	prot := r.Group("/rooms", controller.Prot())
 	prot.GET("/:room", controller.ShowRoom)
-	prot.GET("/:room/json", controller.GetRoom)
+	prot.GET("/:room/", controller.GetRoom)
 
 	active := prot.Group("/", controller.Active())
 	active.POST("/:room/", controller.AcceptVote)
