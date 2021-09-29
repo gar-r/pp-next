@@ -1,7 +1,14 @@
 <script>
+
+    var room = {
+        name: {{ .room.Name }},
+        revealed: {{ .room.Revealed }},
+        revealedBy: {{ .room.RevealedBy }},
+        ts: {{ .room.Ts.UnixMilli }},
+    };
     
     function vote(v) {
-        fetch("/rooms/{{ .room.Name }}/", {
+        fetch("/rooms/" + room.name + "/vote", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -10,16 +17,35 @@
         });
     }
 
+    function reveal() {
+        fetch("/rooms/" + room.name + "/reveal", {
+            method: "POST"
+        })
+        .then(room.revealed = true);
+    }
+
     function sync() {
+        toast();
         setInterval(function() {
             updateTimer();
             updateVotes();
-            updateResults();
+            if (room.revealed) {
+                updateResults();
+            }
         }, 1000);        
     }
 
+    function toast() {
+        if (room.revealed) {
+            M.toast({ 
+                html: "<span class='lime-text'> " + room.revealedBy + "</span>&nbsp;revealed the votes",
+                displayLength: 15000,
+             });
+        }        
+    }
+
     function updateVotes() {
-        fetch("/rooms/{{ .room.Name }}/userlist")
+        fetch("/rooms/" + room.name + "/userlist")
             .then(r => r.text())
             .then(s => {
                 var el = document.getElementById("userlist");
@@ -28,7 +54,7 @@
     }
 
     function updateResults() {
-        fetch("/rooms/{{ .room.Name }}/results")
+        fetch("/rooms/" + room.name + "/results")
             .then(r => r.text())
             .then(s => {
                 var el = document.getElementById("results");
@@ -37,7 +63,7 @@
     }
 
     function updateTimer() {
-        var start = new Date({{ .room.Ts.UnixMilli }});
+        var start = new Date(room.ts);
         var now = new Date();        
         var diff = now - start;
         var mins = Math.floor(diff / 60000);

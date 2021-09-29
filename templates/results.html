@@ -1,13 +1,20 @@
 {{ if .room.Revealed }}
-<div class="row center-align" style="margin-top: 3rem;max-width: 50%;">
-    <table>
+<div class="row center-align" style="margin-top: 3rem;max-width: 75%;">
+    <table class="striped centered">
         <tr>
-            <th>Category</th>
-            <th>Votes</th>
+            <th style="text-align: center;">Category</th>
+            <th style="text-align: center;">Votes</th>
         </tr>
         {{ range .room.Summary }}
+        {{ $opt := (index $.lookup .Category) }}
         <tr>
-            <td>{{ .Category }}</td>
+            <td>
+                {{ if $opt.HasIcon }}
+                <i class="material-icons tiny">{{ $opt.Icon }}</i>
+                {{ else }}
+                {{ $opt.Text }}
+                {{ end }}
+            </td>
             <td>{{ .Count }}</td>
         </tr>
         {{ end }}

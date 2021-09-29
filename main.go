@@ -19,7 +19,7 @@ func main() {
 	room.RegisterVote(model.NewVote("user6", consts.Coffee))
 	room.RegisterVote(model.NewVote("user7", consts.Large))
 	room.RegisterVote(model.NewVote("user8", consts.Question))
-	room.Revealed = true
+	room.Revealed = false
 	config.Repository.Save(room)
 
 	r := gin.Default()
@@ -41,9 +41,9 @@ func main() {
 	prot.GET("/:room/results", controller.Results)
 
 	active := prot.Group("/", controller.Active())
-	active.POST("/:room/", controller.AcceptVote)
-	active.POST("/:room/reveal", nil) // show votes
-	active.POST("/:room/next", nil)   // next story
+	active.POST("/:room/vote", controller.AcceptVote)
+	active.POST("/:room/reveal", controller.Reveal)
+	active.POST("/:room/next", nil) // next story
 
 	r.Run(consts.Addr)
 }

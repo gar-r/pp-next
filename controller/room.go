@@ -52,6 +52,17 @@ func Results(c *gin.Context) {
 	c.HTML(http.StatusOK, "results.html", h)
 }
 
+func Reveal(c *gin.Context) {
+	user := c.MustGet("user")
+	name := c.Param("room")
+	room, err := config.Repository.Load(name)
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
+	room.Revealed = true
+	room.RevealedBy = user.(string)
+}
+
 func AcceptVote(c *gin.Context) {
 	var v int
 	err := c.ShouldBind(&v)
