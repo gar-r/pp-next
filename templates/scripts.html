@@ -14,6 +14,7 @@
         setInterval(function() {
             updateTimer();
             updateVotes();
+            updateResults();
         }, 1000);        
     }
 
@@ -22,6 +23,15 @@
             .then(r => r.text())
             .then(s => {
                 var el = document.getElementById("userlist");
+                el.innerHTML = s;
+            });
+    }
+
+    function updateResults() {
+        fetch("/rooms/{{ .room.Name }}/results")
+            .then(r => r.text())
+            .then(s => {
+                var el = document.getElementById("results");
                 el.innerHTML = s;
             });
     }

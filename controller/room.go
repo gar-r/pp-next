@@ -44,7 +44,12 @@ func Results(c *gin.Context) {
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 	}
-	c.HTML(http.StatusOK, "results.html", room)
+	h := gin.H{
+		"room":    room,
+		"options": config.VoteOptions,
+		"lookup":  config.VoteLookup,
+	}
+	c.HTML(http.StatusOK, "results.html", h)
 }
 
 func AcceptVote(c *gin.Context) {

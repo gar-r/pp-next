@@ -1,18 +1,20 @@
-{{ if .Revealed }}
-<table style="margin-top: 3rem;">
-    <tr>
-        <th>Category</th>
-        <th>Votes</th>
-    </tr>
-    {{ range $s := .Summary }}
-    <tr>
-        <td>%s.Category</td>
-        <td>%s.Count</td>
-    </tr>
-    {{ end }}
-    <tr>
-        <td><i class="material-icons">leaderboard</i></td>
-        <td>{{ .Average }}</td>
-    </tr>
-</table>
+{{ if .room.Revealed }}
+<div class="row center-align" style="margin-top: 3rem;max-width: 50%;">
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Votes</th>
+        </tr>
+        {{ range .room.Summary }}
+        <tr>
+            <td>{{ .Category }}</td>
+            <td>{{ .Count }}</td>
+        </tr>
+        {{ end }}
+        <tr>
+            <td><i class="material-icons">leaderboard</i></td>
+            <td>{{ .room.Average }}</td>
+        </tr>
+    </table>
+</div>
 {{ end }}

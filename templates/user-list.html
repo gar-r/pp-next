@@ -1,6 +1,6 @@
 <div class="row center-align" style="margin-top: 3rem;">
     <h5>Votes</h5>
-    <div class="col s6 offset-s3">
+    <div class="col s6 offset-s3" style="margin-top: 1.5rem;">
         {{ range $user, $vote := .room.Votes }}
         {{ $opt := (index $.lookup $vote.Vote) }}                
         <div class="chip">

@@ -43,20 +43,22 @@ func (r *Room) Reset() {
 // Special votes defined in the consts package are not counted.
 func (r *Room) Average() string {
 	sum := 0
+	cnt := 0
 	for _, v := range r.Votes {
 		if v.IsCoffee() || v.IsLarge() || v.IsNothing() || v.IsQuestion() {
 			continue
 		}
 		sum += v.Vote
+		cnt += 1
 	}
-	avg := float64(sum) / float64(len(r.Votes))
+	avg := float64(sum) / float64(cnt)
 	return fmt.Sprintf("%.2f", avg)
 }
 
 // Summary counts votes by occurence and returns a slice of SummaryItems
 // representing the groups. The slice is sorted by category in ascending order.
-func (r *Room) Summary() []SummaryItem {
-	result := make([]SummaryItem, 0)
+func (r *Room) Summary() []*SummaryItem {
+	result := make([]*SummaryItem, 0)
 	m := r.summaryMap()
 	cat := make([]int, 0, len(m))
 	for k := range m {
@@ -64,7 +66,7 @@ func (r *Room) Summary() []SummaryItem {
 	}
 	sort.Ints(cat)
 	for _, k := range cat {
-		result = append(result, SummaryItem{
+		result = append(result, &SummaryItem{
 			Category: k,
 			Count:    m[k],
 		})
