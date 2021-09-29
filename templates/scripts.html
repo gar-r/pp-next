@@ -4,6 +4,7 @@
         name: {{ .room.Name }},
         revealed: {{ .room.Revealed }},
         revealedBy: {{ .room.RevealedBy }},
+        resetBy: {{ .room.ResetBy }},
         ts: {{ .room.Ts.UnixMilli }},
     };
     
@@ -20,15 +21,21 @@
     function reveal() {
         fetch("/rooms/" + room.name + "/reveal", {
             method: "POST"
-        })
-        .then(room.revealed = true);
+        }).then(window.location.reload());
+    }
+
+    function reset() {
+        fetch("/rooms/" + room.name + "/reset", {
+            method: "POST"
+        }).then(window.location.reload());
     }
 
     function sync() {
         toast();
         setInterval(function() {
             updateTimer();
-            updateVotes();
+            updateEvents();
+            updateVotes();            
             if (room.revealed) {
                 updateResults();
             }
@@ -37,11 +44,18 @@
 
     function toast() {
         if (room.revealed) {
+            showToast(room.revealedBy, "revealed the votes");            
+        } else if (room.resetBy) {
+            showToast(room.resetBy, "started a new story")
+        }
+
+        function showToast(name, action) {
             M.toast({ 
-                html: "<span class='lime-text'> " + room.revealedBy + "</span>&nbsp;revealed the votes",
+                html: "<span class='lime-text'>"
+                    + name + "</span>&nbsp;" + action,
                 displayLength: 15000,
              });
-        }        
+        }
     }
 
     function updateVotes() {
@@ -60,6 +74,16 @@
                 var el = document.getElementById("results");
                 el.innerHTML = s;
             });
+    }
+
+    function updateEvents() {
+        fetch("/rooms/" + room.name + "/events")
+            .then(r => r.json())
+            .then(d => {
+                if (d.revealed && !room.revealed || d.reset && !room.resetBy) {
+                    window.location.reload();
+                }
+            })
     }
 
     function updateTimer() {

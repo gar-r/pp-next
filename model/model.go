@@ -10,11 +10,12 @@ import (
 
 // Room represents a planning poker room
 type Room struct {
-	Name       string           `json:"name"`
-	Revealed   bool             `json:"revealed"`
-	RevealedBy string           `json:"revealedBy"`
-	Votes      map[string]*Vote `json:"votes"`
-	Ts         time.Time        `json:"ts"`
+	Name       string
+	Revealed   bool
+	RevealedBy string
+	ResetBy    string
+	Votes      map[string]*Vote
+	Ts         time.Time
 }
 
 // NewRoom creates a new Room with a pre-defined name
@@ -32,8 +33,13 @@ func (r *Room) RegisterVote(v *Vote) {
 }
 
 // Reset the room, clearing all the votes, but preserving
-// the name of joined users.
-func (r *Room) Reset() {
+// the name of joined users. The user who requested the reset
+// will be stored in the ResetBy field.
+func (r *Room) Reset(user string) {
+	r.ResetBy = user
+	r.Revealed = false
+	r.RevealedBy = ""
+	r.Ts = time.Now()
 	for name := range r.Votes {
 		r.RegisterVote(NewVote(name, consts.Nothing))
 	}
@@ -50,6 +56,9 @@ func (r *Room) Average() string {
 		}
 		sum += v.Vote
 		cnt += 1
+	}
+	if cnt == 0 {
+		return "0"
 	}
 	avg := float64(sum) / float64(cnt)
 	return fmt.Sprintf("%.2f", avg)
@@ -129,4 +138,9 @@ func (v *Vote) IsLarge() bool {
 // IsQuestion returns if the vote value equals the const Question
 func (v *Vote) IsQuestion() bool {
 	return v.Vote == consts.Question
+}
+
+type RoomEvent struct {
+	Revealed bool `json:"revealed"`
+	Reset    bool `json:"reset"`
 }

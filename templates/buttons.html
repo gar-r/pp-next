@@ -1,9 +1,9 @@
-<div class="row center-align" style="margin-top: 3rem;">
-    <a class="waves-effect waves-light btn" id="reveal" onclick="reveal()">
+<div class="row center-align" style="margin-top: 3rem;">    
+    <a class="waves-effect waves-light btn {{ if .Revealed }}disabled{{ end }}" id="reveal" onclick="reveal()">
         <i class="material-icons left">view_carousel</i>
         Reveal Votes
     </a>
-    <a class="waves-effect waves-light btn" id="next" onclick="">
+    <a class="waves-effect waves-light btn" id="next" onclick="reset()">
         <i class="material-icons left">navigate_next</i>
         Next Story
     </a>

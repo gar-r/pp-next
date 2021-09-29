@@ -39,11 +39,12 @@ func main() {
 	prot.GET("/:room", controller.DisplayRoom)
 	prot.GET("/:room/userlist", controller.UserList)
 	prot.GET("/:room/results", controller.Results)
+	prot.GET("/:room/events", controller.GetEvents)
 
 	active := prot.Group("/", controller.Active())
 	active.POST("/:room/vote", controller.AcceptVote)
 	active.POST("/:room/reveal", controller.Reveal)
-	active.POST("/:room/next", nil) // next story
+	active.POST("/:room/reset", controller.ResetRoom)
 
 	r.Run(consts.Addr)
 }
