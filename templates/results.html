@@ -1,0 +1,18 @@
+{{ if .Revealed }}
+<table style="margin-top: 3rem;">
+    <tr>
+        <th>Category</th>
+        <th>Votes</th>
+    </tr>
+    {{ range $s := .Summary }}
+    <tr>
+        <td>%s.Category</td>
+        <td>%s.Count</td>
+    </tr>
+    {{ end }}
+    <tr>
+        <td><i class="material-icons">leaderboard</i></td>
+        <td>{{ .Average }}</td>
+    </tr>
+</table>
+{{ end }}

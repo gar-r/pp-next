@@ -8,7 +8,7 @@ import (
 	"okki.hu/garric/ppnext/consts"
 )
 
-func ShowRoom(c *gin.Context) {
+func DisplayRoom(c *gin.Context) {
 	user := c.MustGet("user")
 	name := c.Param("room")
 	room, err := config.Repository.Load(name)
@@ -30,7 +30,21 @@ func UserList(c *gin.Context) {
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 	}
-	c.HTML(http.StatusOK, "user-list.html", room)
+	h := gin.H{
+		"room":    room,
+		"options": config.VoteOptions,
+		"lookup":  config.VoteLookup,
+	}
+	c.HTML(http.StatusOK, "user-list.html", h)
+}
+
+func Results(c *gin.Context) {
+	name := c.Param("room")
+	room, err := config.Repository.Load(name)
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
+	c.HTML(http.StatusOK, "results.html", room)
 }
 
 func AcceptVote(c *gin.Context) {

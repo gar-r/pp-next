@@ -1,6 +1,7 @@
 <form style="margin-top: 3rem;">
     <div class="row center-align" style="max-width: 66%;">
         {{ range . }}
+        {{ if .Visible }}
         <div class="col s2">
             <div class="row left-align">
                 <label>
@@ -15,6 +16,7 @@
                 </label>
             </div>
         </div>
+        {{ end }}
         {{ end }}
     </div>
 </form>

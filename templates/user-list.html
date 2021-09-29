@@ -1,25 +1,22 @@
-<div class="row center-align" style="margin-top: 3rem;;">
+<div class="row center-align" style="margin-top: 3rem;">
+    <h5>Votes</h5>
     <div class="col s6 offset-s3">
-        {{ range $user, $vote := .Votes }}
+        {{ range $user, $vote := .room.Votes }}
+        {{ $opt := (index $.lookup $vote.Vote) }}                
         <div class="chip">
-            {{ if $vote.IsNothing }}
-            {{ $user }}:<i class="close material-icons">nightlight_round</i>
-            {{ else }} 
-                {{ if $.Revealed }}
-                    {{ if $vote.IsCoffee }}
-                    {{ $user }}:<i class="close material-icons">coffee</i>
-                    {{ else if $vote.IsLarge }}
-                    {{ $user }}:<i class="close material-icons">upgrade</i>
-                    {{ else if $vote.IsQuestion }}
-                    {{ $user }}:<i class="close material-icons">help</i>
-                    {{ else }}
-                    {{ $user }}:&nbsp;&nbsp;<b>{{ $vote.Vote }}</b>
-                    {{ end }}
+            {{ $user }}:
+            {{ if $.room.Revealed }}
+                {{ if $opt.HasIcon }}
+                <i class="close material-icons">{{ $opt.Icon }}</i>
                 {{ else }}
-                {{ $user }}:<i class="close material-icons">check</i>
+                <b>&nbsp;{{ $opt.Text }}</b>
                 {{ end }}
+            {{ else if $vote.IsNothing }}            
+            <i class="close material-icons">{{ $opt.Icon }}</i>
+            {{ else }}
+            <i class="close material-icons">check</i>
             {{ end }}
-        </div>
-        {{ end }}
+        </div>        
+        {{ end }}        
     </div>
 </div>
