@@ -25,6 +25,7 @@ func main() {
 	r := gin.Default()
 
 	r.StaticFile("/favicon.ico", "./assets/favicon.ico")
+	r.StaticFile("/scripts.js", "./assets/scripts.js")
 	r.LoadHTMLGlob("templates/*")
 
 	r.Use(controller.Auth())
