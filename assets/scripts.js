@@ -10,7 +10,7 @@ function initialize() {
 
 function syncTimer() {
 
-    var start = new Date(room.ts);
+    var start = new Date(room.resetTs);
     var now = new Date();        
     var diff = now - start;
     var mins = Math.floor(diff / 60000);
@@ -31,10 +31,18 @@ function syncEvents() {
     fetch("/rooms/" + room.name + "/events")
         .then(r => r.json())
         .then(d => {
-            if (d.revealed && !room.revealed || d.reset && !room.resetBy) {
+            if (shouldReveal(d) || shouldReset(d)) {
                 reload();
             }
         });
+
+        function shouldReveal(d) {
+            return d.revealed && !room.revealed;
+        }
+
+        function shouldReset(d) {
+            return d.resetTs > room.resetTs            
+        }
 }
 
 function syncVotes() {

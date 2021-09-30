@@ -54,11 +54,18 @@ func Results(c *gin.Context) {
 }
 
 func AcceptVote(c *gin.Context) {
-	var v int
-	err := c.ShouldBind(&v)
+	var vote int
+	err := c.ShouldBind(&vote)
 	if err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 	}
+	user := c.MustGet("user").(string)
+	name := c.Param("room")
+	room, err := config.Repository.Load(name)
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
+	room.RegisterVote(model.NewVote(user, vote))
 	c.Status(http.StatusOK)
 }
 
@@ -91,7 +98,7 @@ func GetEvents(c *gin.Context) {
 	}
 	e := &model.RoomEvent{
 		Revealed: room.Revealed,
-		Reset:    room.ResetBy != "",
+		ResetTs:  room.ResetTs.UnixMilli(),
 	}
 	c.JSON(http.StatusOK, e)
 }

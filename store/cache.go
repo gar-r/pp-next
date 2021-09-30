@@ -1,6 +1,10 @@
 package store
 
-import "okki.hu/garric/ppnext/model"
+import (
+	"sync"
+
+	"okki.hu/garric/ppnext/model"
+)
 
 // Cache implements Repository.
 // Instead of providing a stand-alone implementation, Cache is wrapping another Repository, and provides
@@ -8,6 +12,7 @@ import "okki.hu/garric/ppnext/model"
 type Cache struct {
 	repo  Repository
 	cache map[string]*model.Room
+	mux   sync.Mutex
 }
 
 // NewCache returns a new Cache, that wraps the given Repository
@@ -27,6 +32,8 @@ func (c *Cache) Load(name string) (*model.Room, error) {
 	}
 	room, error := c.repo.Load(name)
 	if error == nil {
+		c.mux.Lock()
+		defer c.mux.Unlock()
 		c.cache[room.Name] = room
 	}
 	return room, error
@@ -46,6 +53,8 @@ func (c *Cache) Delete(name string) error {
 }
 
 func (c *Cache) Invalidate(name string) {
+	c.mux.Lock()
+	defer c.mux.Unlock()
 	delete(c.cache, name)
 }
 
