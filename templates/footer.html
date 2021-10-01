@@ -2,8 +2,9 @@
     <div class="container">
         <div class="row">
             <i class="material-icons left">share</i>
-            http://localhost:38080/rooms/{{ .room.Name }}
-            <a class="grey-text text-lighten-4 right" href="mailto:{{ .support }}?subject=Planning Poker">
+            http://localhost:38080/?room={{ .room.Name }}
+            <a class="grey-text text-lighten-4 right" 
+               href="mailto:{{ .support }}?subject=Planning Poker">
                 Contact Developer
             </a>
         </div>

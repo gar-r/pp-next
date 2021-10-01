@@ -36,7 +36,7 @@ func ShowLogin(c *gin.Context) {
 	c.HTML(http.StatusOK, "login.html", h)
 }
 
-// HandleLogin checks if the user
+// HandleLogin logs in the user
 func HandleLogin(c *gin.Context) {
 
 	var form viewmodel.LoginForm
