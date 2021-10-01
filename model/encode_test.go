@@ -1,24 +1,22 @@
 package model
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func Test_Encode_Decode(t *testing.T) {
 	r := NewRoom("name")
 
 	// encode
 	reader, err := Encode(r)
-	if err != nil {
-		t.Error(err)
-	}
+	assert.NoError(t, err)
 
 	// decode
 	s, err := Decode(reader)
-	if err != nil {
-		t.Error(err)
-	}
+	assert.NoError(t, err)
 
-	if r.Name != s.Name {
-		t.Errorf("expected %v, got %v", r, s)
-	}
-
+	assert.Equal(t, r.Name, s.Name)
+	assert.Equal(t, r.ResetTs.UnixMilli(), s.ResetTs.UnixMilli())
 }

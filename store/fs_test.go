@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"okki.hu/garric/ppnext/model"
 )
 
@@ -16,17 +17,13 @@ func Test_FsRepository_RoomPath(t *testing.T) {
 	t.Run("no ending path separator", func(t *testing.T) {
 		r := NewFs(path)
 		p := r.getRoomPath(name)
-		if p != expected {
-			t.Errorf("expected %s, got %s", expected, p)
-		}
+		assert.Equal(t, expected, p)
 	})
 
 	t.Run("with ending path separator", func(t *testing.T) {
 		r := NewFs(path + string(os.PathSeparator))
 		p := r.getRoomPath(name)
-		if p != expected {
-			t.Errorf("expected %s, got %s", expected, p)
-		}
+		assert.Equal(t, expected, p)
 	})
 
 }
@@ -39,42 +36,26 @@ func Test_FsRepository_SaveLoad(t *testing.T) {
 	r1 := model.NewRoom(name)
 
 	err := repo.Save(r1)
-	if err != nil {
-		t.Error(err)
-	}
+	assert.NoError(t, err)
 
 	r2, err := repo.Load(name)
-	if err != nil {
-		t.Error(err)
-	}
+	assert.NoError(t, err)
 
-	if r1.Name != r2.Name {
-		t.Errorf("expected %s, got %s", r1.Name, r2.Name)
-	}
+	assert.Equal(t, r1.Name, r2.Name)
 
 	err = repo.Delete(name)
-	if err != nil {
-		t.Error(err)
-	}
+	assert.NoError(t, err)
 
 	path := repo.getRoomPath(name)
-	_, err = os.Stat(path)
-	if err == nil {
-		t.Errorf("path '%s' still exists after delete", path)
-	}
-
+	assert.NoDirExists(t, path)
 }
 
 func Test_FsRepository_LoadNonExisting(t *testing.T) {
 	repo := NewFs(createTempPath(t))
 	r, err := repo.Load("test")
 	defer repo.Delete("test")
-	if err != nil {
-		t.Error(err)
-	}
-	if r.Name != "test" {
-		t.Errorf("expected %s, got %s", "test", r.Name)
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, "test", r.Name)
 }
 
 func Test_FsRepository_Exists(t *testing.T) {
@@ -84,18 +65,12 @@ func Test_FsRepository_Exists(t *testing.T) {
 
 	// empty repository, user should not exist
 	ex, err := repo.Exists(user)
-	if err != nil {
-		t.Error(err)
-	}
-	if ex {
-		t.Errorf("user '%s' should not exist", user)
-	}
+	assert.NoError(t, err)
+	assert.Falsef(t, ex, "user '%s' should not exist")
 
 	// add user and verify it exists
 	r, err := repo.Load("room")
-	if err != nil {
-		t.Error(err)
-	}
+	assert.NoError(t, err)
 	r.RegisterVote(&model.Vote{
 		User: user,
 		Vote: 3,
@@ -103,12 +78,8 @@ func Test_FsRepository_Exists(t *testing.T) {
 	repo.Save(r)
 	defer repo.Delete(r.Name)
 	ex, err = repo.Exists(user)
-	if err != nil {
-		t.Error(err)
-	}
-	if !ex {
-		t.Errorf("expected user '%s' to exist", user)
-	}
+	assert.NoError(t, err)
+	assert.Truef(t, ex, "expected user '%s' to exist")
 }
 
 func createTempPath(t *testing.T) string {

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"okki.hu/garric/ppnext/model"
 )
 
@@ -14,36 +15,25 @@ func Test_Cache_Load(t *testing.T) {
 	t.Run("cache miss, followed by cache hit", func(t *testing.T) {
 		cache := NewCache(repo)
 
-		// first call to Load results in a cache miss:
+		// first call to Load results in a cache miss
 		room := repo.StubRoom("test")
-
 		actual, _ := cache.Load("test")
 
-		if actual != room {
-			t.Errorf("expected %v, got %v", room, actual)
-		}
+		assert.Equal(t, room, actual)
 
-		// second call to Load is a cache hit:
-		repo.Room = nil
-
+		// second call to Load should be a cache hit
+		repo.Room = nil // change room in repository to something else
 		actual, _ = cache.Load("test")
 
-		if actual != room {
-			t.Errorf("expected %v, got %v", room, actual)
-		}
+		assert.Equal(t, room, actual)
 	})
 
 	t.Run("error propagation", func(t *testing.T) {
 		cache := NewCache(repo)
-		testErr := errors.New("test")
-		repo.Err = testErr
+		repo.Err = errors.New("test")
 
 		_, err := cache.Load("A")
-
-		if err != testErr {
-			t.Errorf("expected %v, got %v", testErr, err)
-		}
-
+		assert.Error(t, err)
 	})
 
 }
@@ -68,21 +58,15 @@ func Test_Cache_Save(t *testing.T) {
 		// reload, should pick up B
 		actual, _ := cache.Load("A")
 
-		if actual != room {
-			t.Errorf("expected %v, got %v", room, actual)
-		}
+		assert.Equal(t, room, actual)
 	})
 
 	t.Run("error propagation", func(t *testing.T) {
 		cache := NewCache(repo)
-		testErr := errors.New("test")
-		repo.Err = testErr
+		repo.Err = errors.New("test")
 
 		err := cache.Save(&model.Room{})
-
-		if err != testErr {
-			t.Errorf("expected %v, got %v", testErr, err)
-		}
+		assert.Error(t, err)
 	})
 
 }
@@ -107,21 +91,15 @@ func Test_Cache_Delete(t *testing.T) {
 		// reload, should pick up B
 		actual, _ := cache.Load("A")
 
-		if actual != room {
-			t.Errorf("expected %v, got %v", room, actual)
-		}
+		assert.Equal(t, room, actual)
 	})
 
 	t.Run("error propagation", func(t *testing.T) {
 		cache := NewCache(repo)
-		testErr := errors.New("test")
-		repo.Err = testErr
+		repo.Err = errors.New("test")
 
 		err := cache.Delete("A")
-
-		if err != testErr {
-			t.Errorf("expected %v, got %v", testErr, err)
-		}
+		assert.Error(t, err)
 	})
 
 }
@@ -143,11 +121,7 @@ func Test_Cache_Invalidate(t *testing.T) {
 
 	// reload, should pick up B
 	actual, _ := cache.Load("A")
-
-	if actual != room {
-		t.Errorf("expected %v, got %v", room, actual)
-	}
-
+	assert.Equal(t, room, actual)
 }
 
 func Test_Cache_Exists(t *testing.T) {
@@ -165,10 +139,7 @@ func Test_Cache_Exists(t *testing.T) {
 		// load room into cache
 		cache.Load("test")
 		exists, _ := cache.Exists("user")
-
-		if !exists {
-			t.Errorf("expected user to exist")
-		}
+		assert.True(t, exists)
 	})
 
 	t.Run("user exists in repo only", func(t *testing.T) {
@@ -180,9 +151,7 @@ func Test_Cache_Exists(t *testing.T) {
 		})
 
 		exists, _ := cache.Exists("user")
-		if !exists {
-			t.Errorf("expected user to exist")
-		}
+		assert.True(t, exists)
 	})
 
 }

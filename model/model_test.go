@@ -1,48 +1,138 @@
 package model
 
 import (
+	"strconv"
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
 	"okki.hu/garric/ppnext/consts"
 )
 
 func TestRoom_NewRoom(t *testing.T) {
-	name := "test"
-	r := NewRoom(name)
-	if r.Name != name {
-		t.Errorf("expected %s, got %s", name, r.Name)
-	}
+
+	t.Run("room name", func(t *testing.T) {
+		name := "name"
+		r := NewRoom(name)
+		assert.Equal(t, name, r.Name)
+	})
+
+	t.Run("new room timestamp", func(t *testing.T) {
+		t1 := time.Now()
+		r := NewRoom("test")
+		t2 := time.Now()
+		assert.True(t, r.ResetTs.After(t1))
+		assert.True(t, r.ResetTs.Before(t2))
+	})
+
+	t.Run("votes map is initialized", func(t *testing.T) {
+		r := NewRoom("test")
+		assert.NotNil(t, r.Votes)
+	})
 }
 
 func TestRoom_RegisterVote(t *testing.T) {
-	r := NewRoom("test")
 
-	v := NewVote("user", 5)
-	r.RegisterVote(v)
+	t.Run("register single vote", func(t *testing.T) {
+		r := NewRoom("test")
+		v := NewVote("user", 5)
+		r.RegisterVote(v)
+		assert.Equal(t, v, r.Votes[v.User])
+	})
 
-	if r.Votes["user"] != v {
-		t.Errorf("expected %v, got %v", v, r.Votes["user"])
-	}
+	t.Run("register multiple votes for the same user", func(t *testing.T) {
+		r := NewRoom("test")
+		v1 := NewVote("user", 1)
+		v2 := NewVote("user", 2)
+		r.RegisterVote(v1)
+		r.RegisterVote(v2)
+		assert.Equal(t, v2, r.Votes["user"])
+	})
+
+}
+
+func TestRoom_Reset(t *testing.T) {
+
+	t.Run("users are retained after reset", func(t *testing.T) {
+		r := NewRoom("test")
+		r.RegisterVote(NewVote("a", 1))
+		r.RegisterVote(NewVote("b", 1))
+		r.RegisterVote(NewVote("c", 1))
+
+		r.Reset("user")
+
+		assert.Contains(t, r.Votes, "a")
+		assert.Contains(t, r.Votes, "b")
+		assert.Contains(t, r.Votes, "c")
+	})
+
+	t.Run("votes are reset", func(t *testing.T) {
+		r := NewRoom("test")
+		r.RegisterVote(NewVote("a", 1))
+		r.RegisterVote(NewVote("b", 2))
+
+		r.Reset("user")
+
+		assert.Equal(t, consts.Nothing, r.Votes["a"].Vote)
+		assert.Equal(t, consts.Nothing, r.Votes["b"].Vote)
+	})
+
+	t.Run("user requesting reset is saved", func(t *testing.T) {
+		r := NewRoom("test")
+		u := "user"
+		r.Reset(u)
+		assert.Equal(t, u, r.ResetBy)
+	})
+
+	t.Run("reset timestamp", func(t *testing.T) {
+		r := NewRoom("test")
+		t1 := time.Now()
+		r.Reset("user")
+		t2 := time.Now()
+		assert.True(t, r.ResetTs.After(t1))
+		assert.True(t, r.ResetTs.Before(t2))
+	})
+
+	t.Run("revealed flag is reset", func(t *testing.T) {
+		r := NewRoom("test")
+		r.Revealed = true
+		r.Reset("user")
+		assert.False(t, r.Revealed)
+	})
+
+	t.Run("revealedBy is reset", func(t *testing.T) {
+		r := NewRoom("test")
+		r.RevealedBy = "a"
+		r.Reset("user")
+		assert.Equal(t, "", r.RevealedBy)
+	})
+
 }
 
 func TestRoom_Average(t *testing.T) {
-	r := NewRoom("test")
-	r.RegisterVote(NewVote("a", 5))
-	r.RegisterVote(NewVote("b", 3))
-	r.RegisterVote(NewVote("c", 7))
-	r.RegisterVote(NewVote("d", consts.Coffee))
-	r.RegisterVote(NewVote("e", consts.Nothing))
-	r.RegisterVote(NewVote("f", consts.Question))
-	r.RegisterVote(NewVote("g", consts.Large))
 
-	avg := r.Average()
-	expected := "2.14"
+	t.Run("average returned as string", func(t *testing.T) {
+		r := NewRoom("test")
+		r.RegisterVote(NewVote("a", 5))
+		r.RegisterVote(NewVote("b", 2))
+		r.RegisterVote(NewVote("c", 7))
+		assert.Equal(t, "4.67", r.Average())
+	})
 
-	if avg != expected {
-		t.Errorf("expected %v, got %v", 0, avg)
-	}
+	t.Run("special values are skipped", func(t *testing.T) {
+		specials := []int{
+			consts.Nothing,
+			consts.Coffee,
+			consts.Large,
+			consts.Question,
+		}
+		r := NewRoom("test")
+		for i, s := range specials {
+			r.RegisterVote(NewVote(strconv.Itoa(i), s))
+		}
 
+		assert.Equal(t, "0.00", r.Average())
+	})
 }
 
 func TestRoom_Summary(t *testing.T) {
@@ -65,24 +155,52 @@ func TestRoom_Summary(t *testing.T) {
 		{Category: consts.Question, Count: 2},
 	}
 
-	if len(sum) != len(expected) {
-		t.Errorf("size mismatch: %v, %v", sum, expected)
-	}
-
-	for i, s := range sum {
-		e := expected[i]
-		if s.Category != e.Category ||
-			s.Count != e.Count {
-			t.Errorf("expected %v, got %v", e, s)
-		}
+	assert.Equal(t, len(expected), len(sum))
+	for i, e := range expected {
+		s := sum[i]
+		assert.Equal(t, e.Category, s.Category)
+		assert.Equal(t, e.Count, s.Count)
 	}
 }
 
-func TestVote_Timestamp(t *testing.T) {
-	v := NewVote("test", 1)
-	now := time.Now()
+func TestVote_NewVote(t *testing.T) {
 
-	if v.Ts.After(now) {
-		t.Errorf("new vote timestamp cannot be in the future: %v", v.Ts)
-	}
+	t.Run("username and vote", func(t *testing.T) {
+		v := NewVote("user", 10)
+		assert.Equal(t, "user", v.User)
+		assert.Equal(t, 10, v.Vote)
+	})
+
+	t.Run("vote timestamp", func(t *testing.T) {
+		t1 := time.Now()
+		v := NewVote("x", 1)
+		t2 := time.Now()
+		assert.True(t, v.Ts.After(t1))
+		assert.True(t, v.Ts.Before(t2))
+	})
+
+	t.Run("special values", func(t *testing.T) {
+
+		t.Run("nothing", func(t *testing.T) {
+			v := NewVote("", consts.Nothing)
+			assert.True(t, v.IsNothing())
+		})
+
+		t.Run("coffee", func(t *testing.T) {
+			v := NewVote("", consts.Coffee)
+			assert.True(t, v.IsCoffee())
+		})
+
+		t.Run("large", func(t *testing.T) {
+			v := NewVote("", consts.Large)
+			assert.True(t, v.IsLarge())
+		})
+
+		t.Run("question", func(t *testing.T) {
+			v := NewVote("", consts.Question)
+			assert.True(t, v.IsQuestion())
+		})
+
+	})
+
 }

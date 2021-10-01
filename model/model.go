@@ -40,9 +40,9 @@ func (r *Room) RegisterVote(v *Vote) {
 // the name of joined users. The user who requested the reset
 // will be stored in the ResetBy field.
 func (r *Room) Reset(user string) {
-	r.ResetBy = user
 	r.Revealed = false
 	r.RevealedBy = ""
+	r.ResetBy = user
 	r.ResetTs = time.Now()
 	for name := range r.Votes {
 		r.RegisterVote(NewVote(name, consts.Nothing))
@@ -61,10 +61,12 @@ func (r *Room) Average() string {
 		sum += v.Vote
 		cnt += 1
 	}
+	var avg float64
 	if cnt == 0 {
-		return "0"
+		avg = 0
+	} else {
+		avg = float64(sum) / float64(cnt)
 	}
-	avg := float64(sum) / float64(cnt)
 	return fmt.Sprintf("%.2f", avg)
 }
 
@@ -87,12 +89,6 @@ func (r *Room) Summary() []*SummaryItem {
 	return result
 }
 
-// SummaryItem represents a single row of the summary table
-type SummaryItem struct {
-	Category int
-	Count    int
-}
-
 func (r *Room) summaryMap() map[int]int {
 	m := make(map[int]int)
 	for _, v := range r.Votes {
@@ -105,6 +101,12 @@ func (r *Room) summaryMap() map[int]int {
 		}
 	}
 	return m
+}
+
+// SummaryItem represents a single row of the summary table
+type SummaryItem struct {
+	Category int
+	Count    int
 }
 
 // Vote represents a single vote coming from a single user
