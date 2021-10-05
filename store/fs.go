@@ -3,6 +3,7 @@ package store
 import (
 	"os"
 	"sync"
+	"time"
 
 	"okki.hu/garric/ppnext/model"
 )
@@ -72,11 +73,7 @@ func (r *Fs) Delete(name string) error {
 // if the given user is present in any of them.
 // This is a slow operation, since it has to scan all rooms.
 func (r *Fs) Exists(user string) (bool, error) {
-	p, err := os.Open(r.rootPath)
-	if err != nil {
-		return false, err
-	}
-	files, err := p.Readdirnames(0)
+	files, err := r.getRooms()
 	if err != nil {
 		return false, err
 	}
@@ -92,6 +89,33 @@ func (r *Fs) Exists(user string) (bool, error) {
 		}
 	}
 	return false, nil
+}
+
+// Cleanup removes obsolete rooms from the filesystem.
+func (r *Fs) Cleanup(maxAge time.Duration) error {
+	ts := time.Now()
+	files, err := r.getRooms()
+	if err != nil {
+		return err
+	}
+	for _, f := range files {
+		room, err := r.Load(f)
+		if err != nil {
+			return err
+		}
+		if ts.Sub(room.ResetTs) > maxAge {
+			r.Delete(room.Name)
+		}
+	}
+	return nil
+}
+
+func (r *Fs) getRooms() (names []string, err error) {
+	p, err := os.Open(r.rootPath)
+	if err != nil {
+		return
+	}
+	return p.Readdirnames(0)
 }
 
 func (r *Fs) getRoomPath(name string) string {

@@ -3,6 +3,7 @@ package store
 import (
 	"os"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"okki.hu/garric/ppnext/model"
@@ -80,6 +81,26 @@ func Test_FsRepository_Exists(t *testing.T) {
 	ex, err = repo.Exists(user)
 	assert.NoError(t, err)
 	assert.Truef(t, ex, "expected user '%s' to exist")
+}
+
+func Test_FsRepository_Cleanup(t *testing.T) {
+	repo := NewFs(createTempPath(t))
+	r1 := model.NewRoom("obsolete")
+	r1.ResetTs = time.Now().Add(-1 * time.Hour)
+	repo.Save(r1)
+	r2 := model.NewRoom("fresh")
+	r2.ResetTs = time.Now()
+	repo.Save(r2)
+
+	err := repo.Cleanup(55 * time.Minute)
+
+	assert.NoError(t, err)
+
+	x, _ := repo.Load("obsolete")
+	assert.NotEqual(t, x.ResetTs.UnixMilli(), r1.ResetTs.UnixMilli())
+
+	y, _ := repo.Load("fresh")
+	assert.Equal(t, y.ResetTs.UnixMilli(), r2.ResetTs.UnixMilli())
 }
 
 func createTempPath(t *testing.T) string {

@@ -3,6 +3,7 @@ package store
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"okki.hu/garric/ppnext/model"
@@ -156,6 +157,29 @@ func Test_Cache_Exists(t *testing.T) {
 
 }
 
+func Test_Cache_Cleanup(t *testing.T) {
+	repo := &testRepository{}
+	cache := NewCache(repo)
+
+	r1 := repo.StubRoom("obsolete")
+	r1.ResetTs = time.Now().Add(-1 * time.Hour)
+	r2 := repo.StubRoom("fresh")
+	r2.ResetTs = time.Now()
+
+	cache.Load("A")
+	cache.Load("B")
+
+	err := cache.Cleanup(55 * time.Minute)
+
+	assert.NoError(t, err)
+
+	x, _ := repo.Load("obsolete")
+	assert.NotEqual(t, x.ResetTs.UnixMilli(), r1.ResetTs.UnixMilli())
+
+	y, _ := repo.Load("fresh")
+	assert.Equal(t, y.ResetTs.UnixMilli(), r2.ResetTs.UnixMilli())
+}
+
 type testRepository struct {
 	Room *model.Room
 	Err  error
@@ -181,4 +205,8 @@ func (r *testRepository) Delete(name string) error {
 
 func (r *testRepository) Exists(user string) (bool, error) {
 	return true, nil
+}
+
+func (r *testRepository) Cleanup(maxAge time.Duration) error {
+	return nil
 }

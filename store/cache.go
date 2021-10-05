@@ -2,6 +2,7 @@ package store
 
 import (
 	"sync"
+	"time"
 
 	"okki.hu/garric/ppnext/model"
 )
@@ -71,4 +72,18 @@ func (c *Cache) Exists(user string) (bool, error) {
 		}
 	}
 	return c.repo.Exists(user)
+}
+
+// Cleanup removes obsolete rooms from the repository.
+// Cache will first cull any expired rooms using its
+// in-memory map. After that, it falls back to calling
+// the wrapped repository.
+func (c *Cache) Cleanup(maxAge time.Duration) error {
+	ts := time.Now()
+	for _, room := range c.cache {
+		if ts.Sub(room.ResetTs) > maxAge {
+			c.Delete(room.Name)
+		}
+	}
+	return c.repo.Cleanup(maxAge)
 }

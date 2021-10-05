@@ -8,6 +8,7 @@ import (
 
 func main() {
 	r := initRouter()
+	scheduleBackgroundCleanup()
 	r.Run(consts.Addr)
 }
 

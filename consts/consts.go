@@ -1,8 +1,13 @@
 package consts
 
+import "time"
+
 const Support = "email@example.com"
 const Addr = ":38080"
 const RoomsPath = "./rooms"
+
+const CleanupFrequency = 30 * time.Second
+const MaximumRoomAge = 12 * time.Hour
 
 const (
 	Nothing  = 100 // did not vote (default)

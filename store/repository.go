@@ -1,6 +1,10 @@
 package store
 
-import "okki.hu/garric/ppnext/model"
+import (
+	"time"
+
+	"okki.hu/garric/ppnext/model"
+)
 
 // Repository represents a storage interface for model.Room objects.
 type Repository interface {
@@ -24,4 +28,9 @@ type Repository interface {
 	// room in the repository, or false otherwise.
 	// Returns an error if there is an underlying storage problem.
 	Exists(user string) (bool, error)
+
+	// Cleanup removes obsolete model.Room files from the repository.
+	// A model.Room is considered obsolete, when a certain amount
+	// of time has elapsed since it was last updated.
+	Cleanup(maxAge time.Duration) error
 }
