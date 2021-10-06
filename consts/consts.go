@@ -6,7 +6,7 @@ const Support = "email@example.com"
 const Addr = ":38080"
 const RoomsPath = "./rooms"
 
-const CleanupFrequency = 30 * time.Second
+const CleanupFrequency = 10 * time.Minute
 const MaximumRoomAge = 12 * time.Hour
 
 const (
