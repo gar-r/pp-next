@@ -3,19 +3,19 @@
 
 {{ template "head.html" . }}
 
-<body>
+<body>    
     <div class="container">
         <h1>Hi.</h1>
-        <p>Join a planning poker room.</p>
-        <form action="/login" method="POST">
+        <h6>Join a planning poker room.</h6>    
+        <form style="margin-top: 3.5rem" action="/login" method="POST">
             <div class="input-field>">
                 <label>Room</label>
-                <input id="room" type="text" name="room" value="{{ .room }}" />
+                <input id="room" type="text" name="room" value="{{ .room }}" required />
             </div>
             <div class="input-field">
                 <label>Pick a name</label>
-                <input {{ .state }} id="name" type="text" name="name" value="{{ .name }}"
-                    class="{{ .valid }}" />
+                <input {{ .state }} id="name" type="text" name="name" value="{{ .name }}" class="{{ .valid }}"
+                    required />
                 <span class="helper-text" data-error="Name already taken"></span>
             </div>
             <button class="btn waves-effect waves-light" type="submit" name="Enter">Enter

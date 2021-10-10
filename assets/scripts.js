@@ -86,7 +86,7 @@ function showToast() {
 
     function makeToast(name, action) {
         M.toast({ 
-            html: "<span class='lime-text'>"
+            html: "<span class='amber-text'>"
                 + name + "</span>&nbsp;" + action,
             displayLength: 15000,
          });
