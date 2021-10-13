@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"okki.hu/garric/ppnext/consts"
 )
 
 const CookieExpiry = 1 * time.Hour
@@ -51,5 +52,5 @@ func Prot() gin.HandlerFunc {
 }
 
 func SetAuthCookie(c *gin.Context, user string) {
-	c.SetCookie("user", user, int(CookieExpiry), "", "localhost", false, true)
+	c.SetCookie("user", user, int(CookieExpiry), "", consts.Domain, false, true)
 }
