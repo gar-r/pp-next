@@ -18,6 +18,7 @@ func initRouter() *gin.Engine {
 	r.StaticFile("/favicon.ico", "./assets/favicon.ico")
 	r.StaticFile("/scripts.js", "./assets/scripts.js")
 	r.StaticFile("/materialize.min.css", "./assets/materialize.min.css")
+	r.StaticFile("/materialize.min.css.map", "./assets/materialize.min.css.map")
 	r.StaticFile("/materialize.min.js", "./assets/materialize.min.js")
 	r.LoadHTMLGlob("templates/*")
 
