@@ -2,16 +2,15 @@ package store
 
 import (
 	"os"
-	"sync"
 	"time"
 
+	"github.com/juju/fslock"
 	"okki.hu/garric/ppnext/model"
 )
 
 // Fs implements Repository with filesystem based storage.
 type Fs struct {
 	rootPath string
-	mux      sync.Mutex
 }
 
 // NewFs returns a new Fs initialized to a given directory (root path).
@@ -46,9 +45,13 @@ func (r *Fs) Load(name string) (*model.Room, error) {
 // Save persists a model.Room data to the filesystem. A file with the name of the model.Room
 // is created. If it exists, it will be overwritten.
 func (r *Fs) Save(room *model.Room) error {
-	r.mux.Lock()
-	defer r.mux.Unlock()
 	path := r.getRoomPath(room.Name)
+	lock := fslock.New(path)
+	err := lock.Lock()
+	if err != nil {
+		return err
+	}
+	defer lock.Unlock()
 	f, err := os.Create(path)
 	if err != nil {
 		return err
@@ -63,8 +66,6 @@ func (r *Fs) Save(room *model.Room) error {
 
 // Delete completely removes the file associated with a model.Room data.
 func (r *Fs) Delete(name string) error {
-	r.mux.Lock()
-	defer r.mux.Unlock()
 	path := r.getRoomPath(name)
 	return os.Remove(path)
 }

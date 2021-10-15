@@ -73,8 +73,8 @@ func HandleLogin(c *gin.Context) {
 			User: name,
 			Vote: consts.Nothing,
 		})
+		config.Repository.Save(room)
 	}
-	config.Repository.Save(room)
 
 	loc := fmt.Sprintf("/rooms/%s", form.Room)
 	c.Redirect(http.StatusFound, loc)
