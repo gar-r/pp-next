@@ -2,11 +2,17 @@
     <nav>
         <div class="nav-wrapper">
             <ul class="left">
-                <li style="margin-left: 1em; margin-right: 1em;"><span><i class="material-icons left">room</i><span>{{ .room.Name }}</span></span></li>
-                <li style="margin-left: 1em; margin-right: 1em;"><span><i class="material-icons left">badge</i><span>{{ .user }}</span></span></li>
+                <li style="margin-left: 1em; margin-right: 1em;">
+                    <span><i class="material-icons left">room</i><span>{{ .room.Name }}</span></span>
+                </li>
+                <li style="margin-left: 1em; margin-right: 1em;">
+                    <span><i class="material-icons left">badge</i><span>{{ .user }}</span></span>
+                </li>
             </ul>
             <ul class="right">
-                <li style="margin-left: 1em; margin-right: 1em;"><span><i class="material-icons right">timer</i><span id="timer">00:00</span></span></li>
+                <li style="margin-left: 1em; margin-right: 1em;">
+                    <span><i class="material-icons right">timer</i><span id="timer">00:00</span></span>
+                </li>
             </ul>
         </div>
     </nav>
