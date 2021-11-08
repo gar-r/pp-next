@@ -2,21 +2,21 @@ package controller
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"okki.hu/garric/ppnext/consts"
 )
 
-const CookieExpiry = 1 * time.Hour
+const CookieName = "ppnext-user"
+const CookieExpiry = 60
 
 // Auth returns a basic (unsecure) cookie based authentication
 // middleware function.
-// We look for the 'user' cookie in the request, and if present,
+// We look for the user cookie in the request, and if present,
 // we set the 'user' context variable to it's value.
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		cookie, err := c.Cookie("user")
+		cookie, err := c.Cookie(CookieName)
 		if err == nil {
 			c.Set("user", cookie)
 
@@ -52,5 +52,5 @@ func Prot() gin.HandlerFunc {
 }
 
 func SetAuthCookie(c *gin.Context, user string) {
-	c.SetCookie("user", user, int(CookieExpiry), "", consts.Domain, false, true)
+	c.SetCookie(CookieName, user, CookieExpiry, "", consts.Domain, false, true)
 }
