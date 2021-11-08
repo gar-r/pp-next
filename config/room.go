@@ -12,7 +12,7 @@ var VoteOptions = []*viewmodel.VoteOption{
 	{Text: "5", Value: 5},
 	{Text: "7", Value: 7},
 	{Text: "13", Value: 13},
-	{Icon: "upgrade", Value: consts.Large},
+	{Icon: "call_split", Value: consts.Large},
 	{Icon: "coffee", Value: consts.Coffee},
 	{Icon: "help", Value: consts.Question},
 	{Icon: "hourglass_full", Value: consts.Nothing, Hidden: true},
