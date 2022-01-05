@@ -1,6 +1,7 @@
 package store
 
 import (
+	"sync"
 	"time"
 
 	"okki.hu/garric/ppnext/model"
@@ -12,6 +13,7 @@ import (
 type Cache struct {
 	repo  Repository
 	cache map[string]*model.Room
+	mutex sync.Mutex
 }
 
 // NewCache returns a new Cache, that wraps the given Repository
@@ -31,7 +33,9 @@ func (c *Cache) Load(name string) (*model.Room, error) {
 	}
 	room, error := c.repo.Load(name)
 	if error == nil {
+		c.mutex.Lock()
 		c.cache[room.Name] = room
+		c.mutex.Unlock()
 	}
 	return room, error
 }
@@ -50,7 +54,9 @@ func (c *Cache) Delete(name string) error {
 }
 
 func (c *Cache) Invalidate(name string) {
+	c.mutex.Lock()
 	delete(c.cache, name)
+	c.mutex.Unlock()
 }
 
 // Exists returns if a given user exists in any room.
