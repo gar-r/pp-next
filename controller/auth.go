@@ -2,13 +2,14 @@ package controller
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"okki.hu/garric/ppnext/consts"
 )
 
 const CookieName = "ppnext-user"
-const CookieExpiry = 60
+const CookieExpiry = 6 * time.Hour
 
 // Auth returns a basic (unsecure) cookie based authentication
 // middleware function.
