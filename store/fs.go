@@ -19,7 +19,7 @@ func NewFs(rootPath string) *Fs {
 	if rootPath[last] != os.PathSeparator {
 		rootPath += string(os.PathSeparator)
 	}
-	err := os.MkdirAll(rootPath, os.ModePerm)
+	err := os.MkdirAll(rootPath, 0700)
 	if err != nil {
 		panic(err)
 	}
