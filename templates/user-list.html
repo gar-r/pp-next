@@ -2,7 +2,7 @@
     <h5>Votes</h5>
     <div class="col s6 offset-s3" style="margin-top: 1.5rem;">
         {{ range $user, $vote := .room.Votes }}
-        {{ $opt := (index $.lookup $vote.Vote) }}                
+        {{ $opt := (index $.lookup $vote.Vote) }}
         <div class="chip">
             {{ $user }}:
             {{ if $.room.Revealed }}
@@ -11,12 +11,12 @@
                 {{ else }}
                 <b>&nbsp;{{ $opt.Text }}</b>
                 {{ end }}
-            {{ else if $vote.IsNothing }}            
+            {{ else if $vote.IsNothing }}
             <i class="close material-icons">{{ $opt.Icon }}</i>
             {{ else }}
             <i class="close material-icons">check</i>
             {{ end }}
-        </div>        
-        {{ end }}        
+        </div>
+        {{ end }}
     </div>
 </div>

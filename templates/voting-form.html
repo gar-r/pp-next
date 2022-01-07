@@ -1,11 +1,14 @@
 <form style="margin-top: 3rem;">
     <div class="row center-align" style="max-width: 66%;">
-        {{ range . }}
+        {{ range .options }}
         {{ if .Visible }}
         <div class="col s2">
             <div class="row left-align">
                 <label>
-                    <input name="votes" type="radio" onchange="vote({{ .Value }})" />
+                    <input
+                        name="votes"
+                        type="radio" onchange="vote({{ .Value }})"
+                        {{ .IsChecked $.user $.room}} />
                     <span>
                         {{ if .HasIcon }}
                         <i class="material-icons" style="font-size: 16px;">{{ .Icon }}</i>
