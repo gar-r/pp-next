@@ -1,3 +1,9 @@
 FROM golang:latest
 
-CMD ["echo", "hello world"]
+WORKDIR /pp-next
+
+COPY . .
+
+RUN go build
+
+CMD [ "./ppnext" ]
