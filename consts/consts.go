@@ -5,7 +5,6 @@ import "time"
 const Support = "email@example.com"
 const Addr = ":38080"
 const Domain = "localhost"
-const RoomsPath = "./rooms"
 
 const CleanupFrequency = 10 * time.Minute
 const MaximumRoomAge = 12 * time.Hour

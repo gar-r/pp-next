@@ -3,11 +3,12 @@ db.createUser({
     pwd: "ppnext",
     roles: [{
         role: "readWrite",
-        db: "ppnextdb"
+        db: "ppnext"
         }
     ]
 })
 
-db = new Mongo().getDB("ppnexdb");
+db = new Mongo().getDB("ppnext");
 
 db.createCollection('rooms');
+db.rooms.createIndex({ name: 1 });

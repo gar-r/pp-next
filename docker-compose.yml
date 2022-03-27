@@ -9,9 +9,9 @@ services:
   mongo:
     image: mongo:latest
     environment:
-      - MONGO_INITDB_DATABASE=ppnextdb
+      - MONGO_INITDB_DATABASE=ppnext
       - MONGO_INITDB_ROOT_USERNAME=ppnext
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_ROOT_PASSWORD=ppnext
     ports:
       - 27017:27017
     volumes:

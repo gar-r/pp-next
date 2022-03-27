@@ -11,12 +11,12 @@ import (
 
 // Room represents a planning poker room
 type Room struct {
-	Name       string
-	Votes      map[string]*Vote
-	Revealed   bool
-	RevealedBy string
-	ResetBy    string
-	ResetTs    time.Time
+	Name       string           `bson:"name"`
+	Votes      map[string]*Vote `bson:"votes"`
+	Revealed   bool             `bson:"revealed"`
+	RevealedBy string           `bson:"revealedBy"`
+	ResetBy    string           `bson:"resetBy"`
+	ResetTs    time.Time        `bson:"resetTs"`
 	mux        sync.Mutex
 }
 
@@ -111,9 +111,9 @@ type SummaryItem struct {
 
 // Vote represents a single vote coming from a single user
 type Vote struct {
-	User string    `json:"user"`
-	Vote int       `json:"vote"`
-	Ts   time.Time `json:"ts"`
+	User string    `json:"user" bson:"user"`
+	Vote int       `json:"vote" bson:"vote"`
+	Ts   time.Time `json:"ts"   bson:"ts"`
 }
 
 // NewVote creates a new Vote with the given user and vote.
