@@ -1,17 +1,22 @@
+var interval = null;
+
 function initialize() {
     showToast();
-    setInterval(function() {
-        syncTimer();
-        syncEvents();
-        syncVotes();
-        syncResults();
-    }, 1000);    
+    sync();
+    interval = setInterval(sync, 250);
+}
+
+function sync() {
+    syncTimer();
+    syncEvents();
+    syncVotes();
+    syncResults();
 }
 
 function syncTimer() {
 
     var start = new Date(room.resetTs);
-    var now = new Date();        
+    var now = new Date();
     var diff = now - start;
     var mins = Math.floor(diff / 60000);
     var secs = Math.floor((diff/1000)%60);
@@ -41,7 +46,7 @@ function syncEvents() {
         }
 
         function shouldReset(d) {
-            return d.resetTs > room.resetTs            
+            return d.resetTs > room.resetTs
         }
 }
 
@@ -76,16 +81,16 @@ function vote(v) {
 }
 
 function showToast() {
-    
+
     if (room.revealed) {
-        makeToast(room.revealedBy, "revealed the votes");            
+        makeToast(room.revealedBy, "revealed the votes");
     } else if (room.resetBy) {
         makeToast(room.resetBy, "started a new story")
-    }    
+    }
 
 
     function makeToast(name, action) {
-        M.toast({ 
+        M.toast({
             html: "<span class='amber-text'>"
                 + name + "</span>&nbsp;" + action,
             displayLength: 15000,
@@ -107,6 +112,7 @@ function reset() {
 }
 
 function reload() {
+    clearInterval(interval);
     window.location.reload();
 }
 
