@@ -66,6 +66,10 @@ func AcceptVote(c *gin.Context) {
 		c.AbortWithError(http.StatusInternalServerError, err)
 	}
 	room.RegisterVote(model.NewVote(user, vote))
+	err = config.Repository.Save(room)
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
 	c.Status(http.StatusOK)
 }
 
@@ -78,6 +82,10 @@ func Reveal(c *gin.Context) {
 	}
 	room.Revealed = true
 	room.RevealedBy = user
+	err = config.Repository.Save(room)
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
 }
 
 func ResetRoom(c *gin.Context) {
@@ -88,6 +96,10 @@ func ResetRoom(c *gin.Context) {
 		c.AbortWithError(http.StatusInternalServerError, err)
 	}
 	room.Reset(user)
+	err = config.Repository.Save(room)
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
 }
 
 func GetEvents(c *gin.Context) {
