@@ -3,7 +3,7 @@ var interval = null;
 function initialize() {
     showToast();
     sync();
-    interval = setInterval(sync, 250);
+    interval = setInterval(sync, 1000);
 }
 
 function sync() {

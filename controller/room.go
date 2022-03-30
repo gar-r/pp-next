@@ -30,6 +30,7 @@ func UserList(c *gin.Context) {
 	room, err := config.Repository.Load(name)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 	h := gin.H{
 		"room":    room,
@@ -44,6 +45,7 @@ func Results(c *gin.Context) {
 	room, err := config.Repository.Load(name)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 	h := gin.H{
 		"room":    room,
@@ -58,17 +60,20 @@ func AcceptVote(c *gin.Context) {
 	err := c.ShouldBind(&vote)
 	if err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
+		return
 	}
 	user := c.MustGet("user").(string)
 	name := c.Param("room")
 	room, err := config.Repository.Load(name)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 	room.RegisterVote(model.NewVote(user, vote))
 	err = config.Repository.Save(room)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 	c.Status(http.StatusOK)
 }
@@ -79,12 +84,14 @@ func Reveal(c *gin.Context) {
 	room, err := config.Repository.Load(name)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 	room.Revealed = true
 	room.RevealedBy = user
 	err = config.Repository.Save(room)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 }
 
@@ -94,11 +101,13 @@ func ResetRoom(c *gin.Context) {
 	room, err := config.Repository.Load(name)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 	room.Reset(user)
 	err = config.Repository.Save(room)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 }
 
@@ -107,6 +116,7 @@ func GetEvents(c *gin.Context) {
 	room, err := config.Repository.Load(name)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 	e := &model.RoomEvent{
 		Revealed: room.Revealed,

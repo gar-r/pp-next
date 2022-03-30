@@ -49,6 +49,7 @@ func HandleLogin(c *gin.Context) {
 		exists, err := config.Repository.Exists(form.Name)
 		if err != nil {
 			c.AbortWithError(http.StatusInternalServerError, err)
+			return
 		}
 		if exists {
 			loc := fmt.Sprintf("/login?room=%s&name=%s&valid=invalid", form.Room, form.Name)
@@ -67,6 +68,7 @@ func HandleLogin(c *gin.Context) {
 	room, err := config.Repository.Load(form.Room)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 	if _, ok := room.Votes[name]; !ok {
 		room.RegisterVote(&model.Vote{
