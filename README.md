@@ -20,7 +20,7 @@ Revealing the results:
 
 ## features
 
-   * simple and minimalistic, no registration needed
+   * simple and minimalist, no registration needed
    * does not track users
    * file based persistence
    * easy to host
