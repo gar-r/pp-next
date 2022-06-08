@@ -28,6 +28,7 @@ func initRouter() *gin.Engine {
 	r.GET("/", controller.ShowLogin)
 	r.GET("/login", controller.ShowLogin)
 	r.POST("/login", controller.HandleLogin)
+	r.GET("/logout", controller.HandleLogout)
 
 	// protected routes
 	prot := r.Group("/rooms", controller.Prot())

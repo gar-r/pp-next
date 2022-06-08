@@ -81,3 +81,16 @@ func HandleLogin(c *gin.Context) {
 	loc := fmt.Sprintf("/rooms/%s", form.Room)
 	c.Redirect(http.StatusFound, loc)
 }
+
+func HandleLogout(c *gin.Context) {
+	user, ok := c.Get("user")
+	if ok {
+		name := user.(string)
+		err := config.Repository.Remove(name)
+		if err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+	}
+	c.Redirect(http.StatusFound, "/")
+}

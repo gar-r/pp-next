@@ -29,6 +29,10 @@ type Repository interface {
 	// Returns an error if there is an underlying storage problem.
 	Exists(user string) (bool, error)
 
+	// Remove removes a user from all rooms.
+	// Returns an error if there is an underlying storage problem.
+	Remove(user string) error
+
 	// Cleanup removes obsolete model.Room files from the repository.
 	// A model.Room is considered obsolete, when a certain amount
 	// of time has elapsed since it was last updated.

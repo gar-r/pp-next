@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -94,6 +95,22 @@ func (m *MongoRepository) Exists(user string) (bool, error) {
 	}}
 	n, err := m.rooms().CountDocuments(context.Background(), filter)
 	return n > 0, err
+}
+
+// Remove removes a user from all rooms.
+// Returns an error if there is an underlying storage problem.
+func (m *MongoRepository) Remove(user string) error {
+	key := fmt.Sprintf("votes.%s", user)
+	filter := bson.D{{}}
+	update := bson.D{{
+		Key: "$unset",
+		Value: bson.D{{
+			Key:   key,
+			Value: 1,
+		}},
+	}}
+	_, err := m.rooms().UpdateMany(context.Background(), filter, update)
+	return err
 }
 
 // Cleanup removes any document from the collection, where
