@@ -19,7 +19,7 @@ func DisplayRoom(c *gin.Context) {
 	h := gin.H{
 		"room":    room,
 		"user":    user,
-		"options": config.VoteOptions,
+		"options": model.VoteOptions,
 		"support": consts.Support,
 	}
 	c.HTML(http.StatusOK, "room.html", h)
@@ -34,8 +34,8 @@ func UserList(c *gin.Context) {
 	}
 	h := gin.H{
 		"room":    room,
-		"options": config.VoteOptions,
-		"lookup":  config.VoteLookup,
+		"options": model.VoteOptions,
+		"lookup":  model.VoteLookup,
 	}
 	c.HTML(http.StatusOK, "user-list.html", h)
 }
@@ -49,14 +49,14 @@ func Results(c *gin.Context) {
 	}
 	h := gin.H{
 		"room":    room,
-		"options": config.VoteOptions,
-		"lookup":  config.VoteLookup,
+		"options": model.VoteOptions,
+		"lookup":  model.VoteLookup,
 	}
 	c.HTML(http.StatusOK, "results.html", h)
 }
 
 func AcceptVote(c *gin.Context) {
-	var vote int
+	var vote float64
 	err := c.ShouldBind(&vote)
 	if err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)

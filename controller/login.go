@@ -73,7 +73,7 @@ func HandleLogin(c *gin.Context) {
 	if _, ok := room.Votes[name]; !ok {
 		room.RegisterVote(&model.Vote{
 			User: name,
-			Vote: consts.Nothing,
+			Vote: model.Nothing,
 		})
 		config.Repository.Save(room)
 	}

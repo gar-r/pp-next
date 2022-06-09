@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+
 	"okki.hu/garric/ppnext/consts"
 	"okki.hu/garric/ppnext/controller"
 )

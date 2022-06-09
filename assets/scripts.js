@@ -99,21 +99,23 @@ function showToast() {
 
 }
 
-function reveal() {
-    fetch("/rooms/" + room.name + "/reveal", {
+async function reveal() {
+    await fetch("/rooms/" + room.name + "/reveal", {
         method: "POST"
-    }).then(reload());
+    });
+    reload();
 }
 
-function reset() {
-    fetch("/rooms/" + room.name + "/reset", {
+async function reset() {
+    await fetch("/rooms/" + room.name + "/reset", {
         method: "POST"
-    }).then(reload());
+    });
+    reload();
 }
 
 function reload() {
     clearInterval(interval);
-    window.location.reload();
+    window.location.reload(true);
 }
 
 

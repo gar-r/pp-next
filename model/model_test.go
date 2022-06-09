@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"okki.hu/garric/ppnext/consts"
 )
 
 func TestRoom_NewRoom(t *testing.T) {
@@ -73,8 +72,8 @@ func TestRoom_Reset(t *testing.T) {
 
 		r.Reset("user")
 
-		assert.Equal(t, consts.Nothing, r.Votes["a"].Vote)
-		assert.Equal(t, consts.Nothing, r.Votes["b"].Vote)
+		assert.Equal(t, Nothing, r.Votes["a"].Vote)
+		assert.Equal(t, Nothing, r.Votes["b"].Vote)
 	})
 
 	t.Run("user requesting reset is saved", func(t *testing.T) {
@@ -120,11 +119,11 @@ func TestRoom_Average(t *testing.T) {
 	})
 
 	t.Run("special values are skipped", func(t *testing.T) {
-		specials := []int{
-			consts.Nothing,
-			consts.Coffee,
-			consts.Large,
-			consts.Question,
+		specials := []float64{
+			Nothing,
+			Coffee,
+			Large,
+			Question,
 		}
 		r := NewRoom("test")
 		for i, s := range specials {
@@ -143,8 +142,8 @@ func TestRoom_Summary(t *testing.T) {
 	r.RegisterVote(NewVote("d", 3))
 	r.RegisterVote(NewVote("e", 7))
 	r.RegisterVote(NewVote("f", 7))
-	r.RegisterVote(NewVote("g", consts.Question))
-	r.RegisterVote(NewVote("h", consts.Question))
+	r.RegisterVote(NewVote("g", Question))
+	r.RegisterVote(NewVote("h", Question))
 
 	sum := r.Summary()
 
@@ -152,7 +151,7 @@ func TestRoom_Summary(t *testing.T) {
 		{Category: 3, Count: 3},
 		{Category: 5, Count: 1},
 		{Category: 7, Count: 2},
-		{Category: consts.Question, Count: 2},
+		{Category: Question, Count: 2},
 	}
 
 	assert.Equal(t, len(expected), len(sum))
@@ -182,22 +181,22 @@ func TestVote_NewVote(t *testing.T) {
 	t.Run("special values", func(t *testing.T) {
 
 		t.Run("nothing", func(t *testing.T) {
-			v := NewVote("", consts.Nothing)
+			v := NewVote("", Nothing)
 			assert.True(t, v.IsNothing())
 		})
 
 		t.Run("coffee", func(t *testing.T) {
-			v := NewVote("", consts.Coffee)
+			v := NewVote("", Coffee)
 			assert.True(t, v.IsCoffee())
 		})
 
 		t.Run("large", func(t *testing.T) {
-			v := NewVote("", consts.Large)
+			v := NewVote("", Large)
 			assert.True(t, v.IsLarge())
 		})
 
 		t.Run("question", func(t *testing.T) {
-			v := NewVote("", consts.Question)
+			v := NewVote("", Question)
 			assert.True(t, v.IsQuestion())
 		})
 

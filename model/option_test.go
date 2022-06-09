@@ -1,10 +1,9 @@
-package viewmodel
+package model
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"okki.hu/garric/ppnext/model"
 )
 
 func TestVoteOption_HasIcon(t *testing.T) {
@@ -42,16 +41,16 @@ func TestVoteOption_Visible(t *testing.T) {
 func TestVoteOption_IsChecked(t *testing.T) {
 
 	opt := &VoteOption{}
-	r := model.NewRoom("test")
+	r := NewRoom("test")
 
 	t.Run("checked", func(t *testing.T) {
-		r.RegisterVote(model.NewVote("user", 2))
+		r.RegisterVote(NewVote("user", 2))
 		opt.Value = 2
 		assert.Equal(t, "checked", opt.IsChecked("user", r))
 	})
 
 	t.Run("unchecked", func(t *testing.T) {
-		r.RegisterVote(model.NewVote("user", 3))
+		r.RegisterVote(NewVote("user", 3))
 		opt.Value = 2
 		assert.Equal(t, "", opt.IsChecked("user", r))
 	})
