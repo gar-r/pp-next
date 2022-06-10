@@ -5,7 +5,7 @@ services:
     ports:
       - 38080:38080
     environment:
-      MONGODB_URI: mongodb://ppnext:ppnext@localhost:27017/?authSource=ppnext
+      MONGODB_URI: mongodb://ppnext:ppnext@mongo:27017/?authSource=ppnext
   mongo:
     image: mongo:latest
     environment:
