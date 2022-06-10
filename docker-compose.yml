@@ -16,6 +16,8 @@ services:
       - 27017:27017
     volumes:
       - ./mongo/initdb.d:/docker-entrypoint-initdb.d:ro
-      - ./mongo/data/db:/data/db
-      - ./mongo/data/log:/var/log/mongodb
-
+      - db:/data/db
+      - log:/var/log/mongodb
+volumes:
+  db:
+  log:
