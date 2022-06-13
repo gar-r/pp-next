@@ -4,6 +4,7 @@ function initialize() {
     showToast();
     sync();
     interval = setInterval(sync, 1000);
+    document.addEventListener("keypress", onKeyPress);
 }
 
 function sync() {
@@ -115,8 +116,17 @@ async function reset() {
 
 function reload() {
     clearInterval(interval);
+    document.removeEventListener("keypress", onKeyPress);
     window.location.reload(true);
 }
 
-
-
+function onKeyPress(e) {
+    const key = e.key
+    const vote = shortcuts.get(key)
+    if (vote) {
+        const input = document.querySelector(`input[accesskey="${key}"]`);
+        if (input) {
+            input.click();
+        }
+    }
+}

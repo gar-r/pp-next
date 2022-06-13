@@ -8,12 +8,12 @@ const (
 )
 
 var VoteOptions = []*VoteOption{
-	{Text: "½", Value: 0.5},
-	{Text: "1", Value: 1},
-	{Text: "2", Value: 2},
-	{Text: "3", Value: 3},
-	{Text: "5", Value: 5},
-	{Text: "8", Value: 8},
+	{Text: "½", Value: 0.5, Shortcut: "`"},
+	{Text: "1", Value: 1, Shortcut: "1"},
+	{Text: "2", Value: 2, Shortcut: "2"},
+	{Text: "3", Value: 3, Shortcut: "3"},
+	{Text: "5", Value: 5, Shortcut: "5"},
+	{Text: "8", Value: 8, Shortcut: "8"},
 	{Text: "13", Value: 13},
 	{Text: "20", Value: 20},
 	{Text: "40", Value: 40},
@@ -40,14 +40,19 @@ var VoteLookup = map[float64]*VoteOption{
 }
 
 type VoteOption struct {
-	Text   string
-	Icon   string
-	Value  float64
-	Hidden bool
+	Text     string
+	Icon     string
+	Value    float64
+	Shortcut string
+	Hidden   bool
 }
 
 func (v *VoteOption) HasIcon() bool {
 	return v.Icon != ""
+}
+
+func (v *VoteOption) HasShortcut() bool {
+	return v.Shortcut != ""
 }
 
 func (v *VoteOption) Visible() bool {

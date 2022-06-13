@@ -6,5 +6,11 @@
         resetBy: {{ .room.ResetBy }},
         resetTs: {{ .room.ResetTs.UnixMilli }},
     };
+    const shortcuts = new Map();
+    {{ range .options }}
+    {{ if .HasShortcut }}
+    shortcuts.set("{{ .Shortcut }}", "{{ .Value }}");
+    {{ end }}
+    {{ end }}
 </script>
 <script src="/scripts.js"></script>
