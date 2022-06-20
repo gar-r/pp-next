@@ -20,8 +20,8 @@ func TestRoom_NewRoom(t *testing.T) {
 		t1 := time.Now()
 		r := NewRoom("test")
 		t2 := time.Now()
-		assert.True(t, r.ResetTs.After(t1))
-		assert.True(t, r.ResetTs.Before(t2))
+		assert.False(t, r.ResetTs.Before(t1))
+		assert.False(t, r.ResetTs.After(t2))
 	})
 
 	t.Run("votes map is initialized", func(t *testing.T) {
@@ -72,8 +72,8 @@ func TestRoom_Reset(t *testing.T) {
 
 		r.Reset("user")
 
-		assert.Equal(t, Nothing, r.Votes["a"].Vote)
-		assert.Equal(t, Nothing, r.Votes["b"].Vote)
+		assert.Equal(t, float64(Nothing), r.Votes["a"].Vote)
+		assert.Equal(t, float64(Nothing), r.Votes["b"].Vote)
 	})
 
 	t.Run("user requesting reset is saved", func(t *testing.T) {
@@ -88,8 +88,8 @@ func TestRoom_Reset(t *testing.T) {
 		t1 := time.Now()
 		r.Reset("user")
 		t2 := time.Now()
-		assert.True(t, r.ResetTs.After(t1))
-		assert.True(t, r.ResetTs.Before(t2))
+		assert.False(t, r.ResetTs.Before(t1))
+		assert.False(t, r.ResetTs.After(t2))
 	})
 
 	t.Run("revealed flag is reset", func(t *testing.T) {
@@ -167,15 +167,15 @@ func TestVote_NewVote(t *testing.T) {
 	t.Run("username and vote", func(t *testing.T) {
 		v := NewVote("user", 10)
 		assert.Equal(t, "user", v.User)
-		assert.Equal(t, 10, v.Vote)
+		assert.Equal(t, float64(10), v.Vote)
 	})
 
 	t.Run("vote timestamp", func(t *testing.T) {
 		t1 := time.Now()
 		v := NewVote("x", 1)
 		t2 := time.Now()
-		assert.True(t, v.Ts.After(t1))
-		assert.True(t, v.Ts.Before(t2))
+		assert.False(t, v.Ts.Before(t1))
+		assert.False(t, v.Ts.After(t2))
 	})
 
 	t.Run("special values", func(t *testing.T) {
