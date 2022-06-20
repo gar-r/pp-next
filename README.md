@@ -1,5 +1,7 @@
 # pp-next
 
+[![Go](https://github.com/garricasaurus/pp-next/actions/workflows/go.yml/badge.svg)](https://github.com/garricasaurus/pp-next/actions/workflows/go.yml)
+
 ## about
 
 `pp-next` is a simple planning poker website
