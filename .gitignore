@@ -4,6 +4,9 @@ ppnext
 # vscode
 __*
 
+# idea
+.idea
+
 # runtime rooms data
 rooms
 

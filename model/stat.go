@@ -6,7 +6,7 @@ import (
 )
 
 // Average returns a string representation of the average value of current votes.
-// Special votes defined in the consts package are not counted.
+// Special vote options are skipped and not counted.
 func (r *Room) Average() string {
 	sum := 0.0
 	cnt := 0
@@ -26,7 +26,7 @@ func (r *Room) Average() string {
 	return fmt.Sprintf("%.2f", avg)
 }
 
-// Summary counts votes by occurence and returns a slice of SummaryItems
+// Summary counts votes by occurrence and returns a slice of SummaryItems
 // representing the groups. The slice is sorted by category in ascending order.
 func (r *Room) Summary() []*SummaryItem {
 	result := make([]*SummaryItem, 0)

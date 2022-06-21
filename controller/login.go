@@ -45,7 +45,7 @@ func HandleLogin(c *gin.Context) {
 	// check if user is logged in
 	user, ok := c.Get("user")
 	if !ok {
-		// ensure user name is not taken
+		// ensure username is not taken
 		exists, err := config.Repository.Exists(form.Name)
 		if err != nil {
 			c.AbortWithError(http.StatusInternalServerError, err)
@@ -57,7 +57,7 @@ func HandleLogin(c *gin.Context) {
 			return
 		}
 
-		// set cookie with user name
+		// set cookie with username
 		SetAuthCookie(c, form.Name)
 		user = form.Name
 	}
