@@ -13,7 +13,7 @@ const CookieExpiry = 60 * 60 * 6
 // Auth returns a basic (unsecure) cookie based authentication
 // middleware function.
 // We look for the user cookie in the request, and if present,
-// we set the 'user' context variable to it's value.
+// we set the 'user' context variable to its value.
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		cookie, err := c.Cookie(CookieName)
@@ -40,7 +40,7 @@ func Active() gin.HandlerFunc {
 
 // Prot returns a middleware function, that can protect routes
 // that require authentication.
-// Unauthenticated users get a HTTP/401 response.
+// Unauthenticated users get an HTTP/401 response.
 func Prot() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, ok := c.Get("user")
