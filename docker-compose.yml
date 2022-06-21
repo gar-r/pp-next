@@ -3,7 +3,7 @@ services:
   ppnext:
     build: .
     ports:
-      - 38080:38080
+      - "38080:38080"
     environment:
       MONGODB_URI: mongodb://ppnext:ppnext@mongo:27017/?authSource=ppnext
     depends_on:
@@ -15,7 +15,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=ppnext
       - MONGO_INITDB_ROOT_PASSWORD=ppnext
     ports:
-      - 27017:27017
+      - "27017:27017"
     volumes:
       - ./mongo/initdb.d:/docker-entrypoint-initdb.d:ro
       - db:/data/db
