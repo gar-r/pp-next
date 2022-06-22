@@ -2,25 +2,26 @@ name: Go
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
 
-    - name: Set up Go
+    - name: 📥 Checkout from Git
+      uses: actions/checkout@v3
+
+    - name: 🔧 Set up Go
       uses: actions/setup-go@v3
       with:
         go-version: 1.18
 
-    - name: Build
+    - name: 🔨 Build
       run: go build -v ./...
 
-    - name: Test
+    - name: 🧪 Test
       run: go test -v ./...
