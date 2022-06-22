@@ -1,4 +1,4 @@
-var interval = null;
+let interval = null;
 
 function initialize() {
     showToast();
@@ -16,13 +16,13 @@ function sync() {
 
 function syncTimer() {
 
-    var start = new Date(room.resetTs);
-    var now = new Date();
-    var diff = now - start;
-    var mins = Math.floor(diff / 60000);
-    var secs = Math.floor((diff/1000)%60);
-    var timer = padZero(""+mins)+":"+padZero(""+secs);
-    var elem = document.getElementById("timer");
+    const start = new Date(room.resetTs);
+    const now = new Date();
+    const diff = now - start;
+    const mins = Math.floor(diff / 60000);
+    const secs = Math.floor((diff/1000)%60);
+    const timer = padZero(""+mins)+":"+padZero(""+secs);
+    const elem = document.getElementById("timer");
     elem.innerHTML = timer;
 
     function padZero(s) {
@@ -55,7 +55,7 @@ function syncVotes() {
     fetch("/rooms/" + room.name + "/userlist")
         .then(r => r.text())
         .then(s => {
-            var el = document.getElementById("userlist");
+            const el = document.getElementById("userlist");
             el.innerHTML = s;
         });
 }
@@ -65,7 +65,7 @@ function syncResults() {
         fetch("/rooms/" + room.name + "/results")
             .then(r => r.text())
             .then(s => {
-                var el = document.getElementById("results");
+                const el = document.getElementById("results");
                 el.innerHTML = s;
             });
     }
