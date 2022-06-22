@@ -47,4 +47,4 @@ Revealing the results:
    http://localhost:38080/
    ```
 
-The votes database will be located in the `mongo/data` directory by default.
+The database containing the votes will be located in the `mongo/data` directory by default.
