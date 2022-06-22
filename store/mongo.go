@@ -10,7 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"okki.hu/garric/ppnext/consts"
 	"okki.hu/garric/ppnext/model"
 )
 
@@ -114,9 +113,9 @@ func (m *MongoRepository) Remove(user string) error {
 }
 
 // Cleanup removes any document from the collection, where
-// the resetTs for the room is older than consts.MaximumRoomAge.
+// the resetTs for the room is older than maxAge.
 func (m *MongoRepository) Cleanup(maxAge time.Duration) error {
-	ts := time.Now().Add(-consts.MaximumRoomAge)
+	ts := time.Now().Add(-maxAge)
 	filter := bson.D{{
 		Key: "resetTs",
 		Value: bson.D{{
