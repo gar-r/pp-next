@@ -37,7 +37,7 @@ func ShowLogin(c *gin.Context) {
 		h["state"] = "readonly"
 	}
 
-	c.HTML(http.StatusOK, "login.html", h)
+	c.HTML(http.StatusOK, "login.html.tmpl", h)
 }
 
 // HandleLogin logs in the user

@@ -23,7 +23,7 @@ func DisplayRoom(c *gin.Context) {
 		"options": model.VoteOptions,
 		"support": consts.Support,
 	}
-	c.HTML(http.StatusOK, "room.html", h)
+	c.HTML(http.StatusOK, "room.html.tmpl", h)
 }
 
 func UserList(c *gin.Context) {
@@ -38,7 +38,7 @@ func UserList(c *gin.Context) {
 		"options": model.VoteOptions,
 		"lookup":  model.VoteLookup,
 	}
-	c.HTML(http.StatusOK, "user-list.html", h)
+	c.HTML(http.StatusOK, "user-list.html.tmpl", h)
 }
 
 func Results(c *gin.Context) {
@@ -53,7 +53,7 @@ func Results(c *gin.Context) {
 		"options": model.VoteOptions,
 		"lookup":  model.VoteLookup,
 	}
-	c.HTML(http.StatusOK, "results.html", h)
+	c.HTML(http.StatusOK, "results.html.tmpl", h)
 }
 
 func AcceptVote(c *gin.Context) {
