@@ -25,3 +25,9 @@ jobs:
 
     - name: 🧪 Test
       run: go test -v ./...
+
+    - name: 🤖 Static analysis
+      uses: dominikh/staticcheck-action@v1.2.0
+      with:
+        version: "2022.1.1"
+        install-go: false
