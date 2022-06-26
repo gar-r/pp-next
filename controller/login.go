@@ -17,7 +17,11 @@ import (
 func ShowLogin(c *gin.Context) {
 
 	var qp viewmodel.LoginQueryParams
-	c.ShouldBindQuery(&qp)
+	err := c.ShouldBindQuery(&qp)
+	if err != nil {
+		_ = c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
 
 	h := gin.H{
 		"room":  qp.Room,
@@ -33,22 +37,26 @@ func ShowLogin(c *gin.Context) {
 		h["state"] = "readonly"
 	}
 
-	c.HTML(http.StatusOK, "login.html", h)
+	c.HTML(http.StatusOK, "login.html.tmpl", h)
 }
 
 // HandleLogin logs in the user
 func HandleLogin(c *gin.Context) {
 
 	var form viewmodel.LoginForm
-	c.ShouldBind(&form)
+	err := c.ShouldBind(&form)
+	if err != nil {
+		_ = c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
 
 	// check if user is logged in
 	user, ok := c.Get("user")
 	if !ok {
 		// ensure username is not taken
-		exists, err := config.Repository.Exists(form.Name)
-		if err != nil {
-			c.AbortWithError(http.StatusInternalServerError, err)
+		exists, err2 := config.Repository.Exists(form.Name)
+		if err2 != nil {
+			_ = c.AbortWithError(http.StatusInternalServerError, err2)
 			return
 		}
 		if exists {
@@ -67,15 +75,19 @@ func HandleLogin(c *gin.Context) {
 	// if needed, add user to the room
 	room, err := config.Repository.Load(form.Room)
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
-	if _, ok := room.Votes[name]; !ok {
+	if _, ex := room.Votes[name]; !ex {
 		room.RegisterVote(&model.Vote{
 			User: name,
 			Vote: model.Nothing,
 		})
-		config.Repository.Save(room)
+		err2 := config.Repository.Save(room)
+		if err2 != nil {
+			_ = c.AbortWithError(http.StatusInternalServerError, err2)
+			return
+		}
 	}
 
 	loc := fmt.Sprintf("/rooms/%s", form.Room)
@@ -88,7 +100,7 @@ func HandleLogout(c *gin.Context) {
 		name := user.(string)
 		err := config.Repository.Remove(name)
 		if err != nil {
-			c.AbortWithError(http.StatusInternalServerError, err)
+			_ = c.AbortWithError(http.StatusInternalServerError, err)
 			return
 		}
 	}

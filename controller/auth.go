@@ -52,5 +52,6 @@ func Prot() gin.HandlerFunc {
 }
 
 func SetAuthCookie(c *gin.Context, user string) {
+	c.SetSameSite(http.SameSiteStrictMode)
 	c.SetCookie(CookieName, user, CookieExpiry, "", consts.Domain, false, true)
 }

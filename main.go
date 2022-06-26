@@ -44,5 +44,7 @@ func initRouter() *gin.Engine {
 	active.POST("/:room/reveal", controller.Reveal)
 	active.POST("/:room/reset", controller.ResetRoom)
 
+	_ = r.SetTrustedProxies(nil)
+
 	return r
 }

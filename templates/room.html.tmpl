@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html>
 
-{{ template "head.html" . }}
+{{ template "head.html.tmpl" . }}
 
 <body style="display: flex;min-height: 100vh;flex-direction: column;" onload="initialize()">
 
-    {{ template "header.html" . }}
+    {{ template "header.html.tmpl" . }}
 
     <main style="flex: 1 0 auto">
         <div class="container" style="margin-top: 3rem;">
-        {{ template "voting-form.html" . }}
+        {{ template "voting-form.html.tmpl" . }}
         <div id="userlist"></div>
         <div id="results"></div>
-        {{ template "buttons.html" .room }}
+        {{ template "buttons.html.tmpl" .room }}
         </div>
     </main>
 
-    {{ template "footer.html" . }}
+    {{ template "footer.html.tmpl" . }}
 
 </body>
 
-{{ template "scripts.html" . }}
+{{ template "scripts.html.tmpl" . }}
 
 </html>
