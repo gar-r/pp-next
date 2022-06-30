@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -40,12 +41,15 @@ func Active() gin.HandlerFunc {
 
 // Prot returns a middleware function, that can protect routes
 // that require authentication.
-// Unauthenticated users get an HTTP/401 response.
+// Unauthenticated users get redirected to the login page.
 func Prot() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, ok := c.Get("user")
 		if !ok {
-			c.AbortWithStatus(http.StatusUnauthorized)
+			room := c.Param("room")
+			loc := fmt.Sprintf("/login?room=%s", room)
+			c.Redirect(http.StatusFound, loc)
+			return
 		}
 		c.Next()
 	}
