@@ -103,6 +103,7 @@ func HandleLogout(c *gin.Context) {
 			_ = c.AbortWithError(http.StatusInternalServerError, err)
 			return
 		}
+		ClearAuthCookie(c)
 	}
 	c.Redirect(http.StatusFound, "/")
 }
