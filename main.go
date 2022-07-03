@@ -35,11 +35,13 @@ func initRouter() *gin.Engine {
 	// protected routes
 	prot := r.Group("/rooms", controller.Prot())
 	prot.GET("/:room", controller.DisplayRoom)
-	prot.GET("/:room/userlist", controller.UserList)
-	prot.GET("/:room/results", controller.Results)
-	prot.GET("/:room/events", controller.GetEvents)
 
-	active := prot.Group("/", controller.Active())
+	api := r.Group("/rooms", controller.Api())
+	api.GET("/:room/userlist", controller.UserList)
+	api.GET("/:room/results", controller.Results)
+	api.GET("/:room/events", controller.GetEvents)
+
+	active := api.Group("/", controller.Active())
 	active.POST("/:room/vote", controller.AcceptVote)
 	active.POST("/:room/reveal", controller.Reveal)
 	active.POST("/:room/reset", controller.ResetRoom)

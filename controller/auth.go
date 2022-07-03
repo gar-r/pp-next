@@ -20,9 +20,7 @@ func Auth() gin.HandlerFunc {
 		cookie, err := c.Cookie(CookieName)
 		if err == nil {
 			c.Set("user", cookie)
-
 		}
-		c.Next()
 	}
 }
 
@@ -39,9 +37,8 @@ func Active() gin.HandlerFunc {
 	}
 }
 
-// Prot returns a middleware function, that can protect routes
-// that require authentication.
-// Unauthenticated users get redirected to the login page.
+// Prot returns a middleware function, that protects pages which require
+// authentication. Unauthenticated users get redirected to the login page.
 func Prot() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, ok := c.Get("user")
@@ -49,13 +46,29 @@ func Prot() gin.HandlerFunc {
 			room := c.Param("room")
 			loc := fmt.Sprintf("/login?room=%s", room)
 			c.Redirect(http.StatusFound, loc)
+			c.Abort()
+		}
+	}
+}
+
+// Api returns a middleware function, that protects api routes which require
+// authentication. Unauthenticated calls result in http.StatusUnauthorized.
+func Api() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		_, ok := c.Get("user")
+		if !ok {
+			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
-		c.Next()
 	}
 }
 
 func SetAuthCookie(c *gin.Context, user string) {
 	c.SetSameSite(http.SameSiteStrictMode)
 	c.SetCookie(CookieName, user, CookieExpiry, "", consts.Domain, false, true)
+}
+
+func ClearAuthCookie(c *gin.Context) {
+	c.SetSameSite(http.SameSiteStrictMode)
+	c.SetCookie(CookieName, "", -1, "", consts.Domain, false, true)
 }
