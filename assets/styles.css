@@ -1,0 +1,19 @@
+span.share [onclick="copyToClipboard(this)"] {
+    cursor: pointer;
+}
+
+span.share i {
+    transition: visibility 0s, opacity 0.35s linear;
+}
+
+span.share i.icon-swapped, span.share:hover i.icon-default {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+}
+
+span.share:hover i.icon-swapped, span.share i.icon-default {
+    position: initial;
+    visibility: visible;
+    opacity: 1;
+}

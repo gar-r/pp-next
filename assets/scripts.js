@@ -81,6 +81,14 @@ function vote(v) {
     });
 }
 
+function makeToast(name, action) {
+    M.toast({
+        html: "<span class='amber-text'>"
+            + name + "</span>&nbsp;" + action,
+        displayLength: 15000,
+     });
+}
+
 function showToast() {
 
     if (room.revealed) {
@@ -88,16 +96,6 @@ function showToast() {
     } else if (room.resetBy) {
         makeToast(room.resetBy, "started a new story")
     }
-
-
-    function makeToast(name, action) {
-        M.toast({
-            html: "<span class='amber-text'>"
-                + name + "</span>&nbsp;" + action,
-            displayLength: 15000,
-         });
-    }
-
 }
 
 async function reveal() {
@@ -117,6 +115,7 @@ async function reset() {
 function reload() {
     clearInterval(interval);
     document.removeEventListener("keypress", onKeyPress);
+    // https://developer.mozilla.org/en-US/docs/Web/API/Location/reload#parameters
     window.location.reload(true);
 }
 
@@ -130,3 +129,12 @@ function onKeyPress(e) {
         }
     }
 }
+
+function copyToClipboard(element) {
+    navigator.clipboard.writeText(element.innerText)
+        .then(() => makeToast('Room link', 'copied to clipboard!'))
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    M.Tooltip.init(document.querySelectorAll('.tooltipped'), {});
+});
