@@ -2,16 +2,22 @@
     <nav>
         <div class="nav-wrapper">
             <ul class="left">
-                <li style="margin-left: 1em; margin-right: 1em;">
-                    <span><i class="material-icons left">room</i><span>{{ .room.Name }}</span></span>
+                <li class="nav-item">
+                    <span class="tooltipped" data-position="bottom" data-tooltip="Name of the room">
+                        <i class="material-icons left">room</i><span>{{ .room.Name }}</span>
+                    </span>
                 </li>
-                <li style="margin-left: 1em; margin-right: 1em;">
-                    <span><i class="material-icons left">badge</i><span>{{ .user }}</span></span>
+                <li class="nav-item">
+                    <span class="tooltipped" data-position="bottom" data-tooltip="Your name. Log out to change.">
+                        <i class="material-icons left">badge</i><span>{{ .user }}</span>
+                    </span>
                 </li>
             </ul>
             <ul class="right">
-                <li style="margin-left: 1em; margin-right: 1em;">
-                    <span><i class="material-icons right">timer</i><span id="timer">00:00</span></span>
+                <li class="nav-item">
+                    <span class="tooltipped" data-position="bottom" data-tooltip="Story elapsed time">
+                        <i class="material-icons right">timer</i><span id="timer">00:00</span>
+                    </span>
                 </li>
                 <li>
                     <a href="/logout">
