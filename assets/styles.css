@@ -17,3 +17,8 @@ span.share:hover i.icon-swapped, span.share i.icon-default {
     visibility: visible;
     opacity: 1;
 }
+
+.nav-wrapper .nav-item {
+    margin-left: 1em;
+    margin-right: 1em;
+}
