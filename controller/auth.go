@@ -5,11 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"okki.hu/garric/ppnext/consts"
+	"okki.hu/garric/ppnext/config"
 )
-
-const CookieName = "ppnext-user"
-const CookieExpiry = 60 * 60 * 6
 
 // Auth returns a basic (unsecure) cookie based authentication
 // middleware function.
@@ -17,7 +14,7 @@ const CookieExpiry = 60 * 60 * 6
 // we set the 'user' context variable to its value.
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		cookie, err := c.Cookie(CookieName)
+		cookie, err := c.Cookie(config.AuthCookieName)
 		if err == nil {
 			c.Set("user", cookie)
 		}
@@ -65,10 +62,10 @@ func Api() gin.HandlerFunc {
 
 func SetAuthCookie(c *gin.Context, user string) {
 	c.SetSameSite(http.SameSiteStrictMode)
-	c.SetCookie(CookieName, user, CookieExpiry, "", consts.Domain, false, true)
+	c.SetCookie(config.AuthCookieName, user, config.AuthCookieExpiry, "", config.Domain, false, true)
 }
 
 func ClearAuthCookie(c *gin.Context) {
 	c.SetSameSite(http.SameSiteStrictMode)
-	c.SetCookie(CookieName, "", -1, "", consts.Domain, false, true)
+	c.SetCookie(config.AuthCookieName, "", -1, "", config.Domain, false, true)
 }

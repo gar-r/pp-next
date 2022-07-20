@@ -6,7 +6,6 @@ COPY /go.mod ./
 COPY /go.sum ./
 COPY /*.go ./
 COPY /config ./config
-COPY /consts ./consts
 COPY /viewmodel ./viewmodel
 COPY /store ./store
 COPY /controller ./controller

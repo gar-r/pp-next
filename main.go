@@ -1,17 +1,20 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"fmt"
 	"log"
 
-	"okki.hu/garric/ppnext/consts"
+	"github.com/gin-gonic/gin"
+
+	"okki.hu/garric/ppnext/config"
 	"okki.hu/garric/ppnext/controller"
 )
 
 func main() {
 	r := initRouter()
 	scheduleBackgroundCleanup()
-	log.Fatal(r.Run(consts.Addr))
+	addr := fmt.Sprintf(":%d", config.Port)
+	log.Fatal(r.Run(addr))
 }
 
 func initRouter() *gin.Engine {

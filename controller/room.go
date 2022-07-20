@@ -5,7 +5,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"okki.hu/garric/ppnext/config"
-	"okki.hu/garric/ppnext/consts"
 	"okki.hu/garric/ppnext/model"
 )
 
@@ -21,7 +20,8 @@ func DisplayRoom(c *gin.Context) {
 		"room":    room,
 		"user":    user,
 		"options": model.VoteOptions,
-		"support": consts.Support,
+		"support": config.Support,
+		"share":   config.ShareUrlBase,
 	}
 	c.HTML(http.StatusOK, "room.html.tmpl", h)
 }
