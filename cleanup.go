@@ -12,7 +12,10 @@ func scheduleBackgroundCleanup() {
 	ch := time.NewTicker(config.CleanupFrequency)
 	go func() {
 		for range ch.C {
-			log.Println(config.Repository.Cleanup(config.MaximumRoomAge))
+			err := config.Repository.Cleanup(config.MaximumRoomAge)
+			if err != nil {
+				log.Println(err)
+			}
 		}
 	}()
 
