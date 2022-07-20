@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"okki.hu/garric/ppnext/config"
-	"okki.hu/garric/ppnext/consts"
 	"okki.hu/garric/ppnext/model"
 	"okki.hu/garric/ppnext/viewmodel"
 )
@@ -27,7 +26,7 @@ func ShowLogin(c *gin.Context) {
 		"room":  qp.Room,
 		"name":  qp.Name,
 		"valid": qp.Valid,
-		"email": consts.Support,
+		"email": config.Support,
 	}
 
 	// check if user is logged in

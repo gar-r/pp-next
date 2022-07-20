@@ -5,15 +5,14 @@ import (
 	"time"
 
 	"okki.hu/garric/ppnext/config"
-	"okki.hu/garric/ppnext/consts"
 )
 
 func scheduleBackgroundCleanup() {
 
-	ch := time.NewTicker(consts.CleanupFrequency)
+	ch := time.NewTicker(config.CleanupFrequency)
 	go func() {
 		for range ch.C {
-			log.Println(config.Repository.Cleanup(consts.MaximumRoomAge))
+			log.Println(config.Repository.Cleanup(config.MaximumRoomAge))
 		}
 	}()
 
