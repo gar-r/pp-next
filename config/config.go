@@ -14,11 +14,12 @@ var Repository store.Repository = store.NewMongoRepository() // Repository for t
 
 var TlsEnabled = configValue("TLS_ENABLED", false, strconv.ParseBool)
 var Port = configValue("PORT", 38080, strconv.Atoi)
+var PublicPort = configValue("PUBLIC_PORT", Port, strconv.Atoi)
 
 var Domain = configString("DOMAIN", "localhost")
 var Support = configString("SUPPORT_EMAIL", "email@example.com")
 
-var CleanupFrequencyMinutes = configValue("CLEANUP_FREQUENCY", 10, strconv.Atoi)
+var CleanupFrequencyMinutes = configValue("CLEANUP_FREQUENCY_MINUTES", 10, strconv.Atoi)
 var CleanupFrequency = time.Duration(CleanupFrequencyMinutes) * time.Minute
 
 var MaximumRoomAgeHours = configValue("CLEANUP_MAX_ROOM_AGE_HOURS", 12, strconv.Atoi)
@@ -34,7 +35,11 @@ var ShareUrlBase = func() string {
 	if TlsEnabled {
 		scheme = "https"
 	}
-	return fmt.Sprintf("%s://%s:%d/rooms/", scheme, Domain, Port)
+	portStr := fmt.Sprintf(":%d", PublicPort)
+	if PublicPort == 80 || PublicPort == 443 {
+		portStr = ""
+	}
+	return fmt.Sprintf("%s://%s%s/rooms/", scheme, Domain, portStr)
 }()
 
 func configValue[T any](envVarName string, defaultValue T, convertFn func(string) (T, error)) T {
