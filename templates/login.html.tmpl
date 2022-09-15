@@ -24,6 +24,17 @@
         </form>
         <p><a href="mailto:{{ .email }}?subject=Planning Poker Next">Contact developer</a></p>
     </div>
+    <div class="container bottom-align">
+        <div class="row center-align">
+            <div class="col s1 offset-s5">
+                <div><i class="material-icons tooltipped" data-position="top" data-tooltip="number of active rooms">meeting_room</i></div>
+                <div><span>{{ .rooms }}</span></div>
+            </div>
+            <div class="col s1">
+                <div><i class="material-icons tooltipped" data-position="top" data-tooltip="number of users logged in">group</i></div>
+                <div><span>{{ .users }}</span></div>
+            </div>
+        </div>
+    </div>
 </body>
-
 </html>

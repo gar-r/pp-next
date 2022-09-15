@@ -134,7 +134,3 @@ function copyToClipboard(element) {
     navigator.clipboard.writeText(element.innerText)
         .then(() => makeToast('Room link', 'copied to clipboard!'))
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    M.Tooltip.init(document.querySelectorAll('.tooltipped'), {});
-});

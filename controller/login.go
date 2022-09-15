@@ -22,11 +22,25 @@ func ShowLogin(c *gin.Context) {
 		return
 	}
 
+	rooms, err := config.Repository.RoomCount()
+	if err != nil {
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	users, err := config.Repository.UserCount()
+	if err != nil {
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
 	h := gin.H{
 		"room":  qp.Room,
 		"name":  qp.Name,
 		"valid": qp.Valid,
 		"email": config.Support,
+		"rooms": rooms,
+		"users": users,
 	}
 
 	// check if user is logged in

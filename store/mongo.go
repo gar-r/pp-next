@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -110,6 +111,38 @@ func (m *MongoRepository) Remove(user string) error {
 	}}
 	_, err := m.rooms().UpdateMany(context.Background(), filter, update)
 	return err
+}
+
+func (m *MongoRepository) RoomCount() (int, error) {
+	filter := bson.D{{}}
+	c, err := m.rooms().CountDocuments(context.Background(), filter)
+	return int(c), err
+}
+
+func (m *MongoRepository) UserCount() (int, error) {
+	pipeline := []interface{}{
+		bson.D{{"$project", bson.D{{"votes", bson.D{{"$objectToArray", "$votes"}}}}}},
+		bson.D{{"$project", bson.D{{"user", "$votes.k"}}}},
+		bson.D{{"$unwind", "$user"}},
+		bson.D{{"$group", bson.D{{"_id", "$user"}}}},
+		bson.D{{"$count", "count"}},
+	}
+	cur, err := m.rooms().Aggregate(context.Background(), pipeline)
+	if err != nil {
+		return 0, err
+	}
+	if !cur.Next(context.Background()) {
+		return 0, nil
+	}
+	var res bson.M
+	if err = cur.Decode(&res); err != nil {
+		return 0, err
+	}
+	count, ok := res["count"].(int32)
+	if !ok {
+		return 0, errors.New("invalid result")
+	}
+	return int(count), nil
 }
 
 // Cleanup removes any document from the collection, where

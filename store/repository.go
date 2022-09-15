@@ -33,6 +33,14 @@ type Repository interface {
 	// Returns an error if there is an underlying storage problem.
 	Remove(user string) error
 
+	// RoomCount returns the number rooms currently active.
+	// Returns an error if there is an underlying storage problem.
+	RoomCount() (int, error)
+
+	// UserCount return the number of users across all rooms.
+	// Returns an error if there is an underlying storage problem.
+	UserCount() (int, error)
+
 	// Cleanup removes obsolete model.Room files from the repository.
 	// A model.Room is considered obsolete, when a certain amount
 	// of time has elapsed since it was last updated.
