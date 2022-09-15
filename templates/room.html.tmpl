@@ -3,11 +3,11 @@
 
 {{ template "head.html.tmpl" . }}
 
-<body style="display: flex;min-height: 100vh;flex-direction: column;" onload="initialize()">
+<body onload="initialize()">
 
     {{ template "header.html.tmpl" . }}
 
-    <main style="flex: 1 0 auto">
+    <main>
         <div class="container" style="margin-top: 3rem;">
         {{ template "voting-form.html.tmpl" . }}
         <div id="userlist"></div>
