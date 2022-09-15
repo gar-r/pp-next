@@ -1,7 +1,5 @@
 # pp-next
 
-[![Go](https://github.com/garricasaurus/pp-next/actions/workflows/go.yml/badge.svg)](https://github.com/garricasaurus/pp-next/actions/workflows/go.yml)
-
 ## about
 
 `pp-next` is a simple planning poker website. An example deployment is available [here](https://ppnext.okki.hu), but it is very easy (and recommended) to deploy it yourself.
@@ -62,7 +60,6 @@ For most standard deployments it is sufficient to add the following variables:
 services:
   ppnext:
     environment:
-      [...]
       TLS_ENABLED: "true"
       PUBLIC_PORT: 443
       DOMAIN: "your-domain.example.com"
