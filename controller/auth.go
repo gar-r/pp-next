@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gar-r/ppnext/config"
 	"github.com/gin-gonic/gin"
-	"okki.hu/garric/ppnext/config"
 )
 
 // Auth returns a basic (unsecure) cookie based authentication

@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"okki.hu/garric/ppnext/store"
+	"github.com/gar-r/ppnext/store"
 )
 
 var Repository store.Repository = store.NewMongoRepository() // Repository for the application

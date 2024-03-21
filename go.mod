@@ -1,4 +1,4 @@
-module okki.hu/garric/ppnext
+module github.com/gar-r/ppnext
 
 go 1.18
 

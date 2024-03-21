@@ -30,7 +30,7 @@ Revealing the results:
    1. clone the source code:
 
    ```
-   git clone https://github.com/garricasaurus/pp-next
+   git clone https://github.com/gar-r/pp-next
    ```
 
 

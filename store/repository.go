@@ -3,7 +3,7 @@ package store
 import (
 	"time"
 
-	"okki.hu/garric/ppnext/model"
+	"github.com/gar-r/ppnext/model"
 )
 
 // Repository represents a storage interface for model.Room objects.

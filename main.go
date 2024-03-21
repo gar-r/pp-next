@@ -6,8 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"okki.hu/garric/ppnext/config"
-	"okki.hu/garric/ppnext/controller"
+	"github.com/gar-r/ppnext/config"
+	"github.com/gar-r/ppnext/controller"
 )
 
 func main() {

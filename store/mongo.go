@@ -8,10 +8,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/gar-r/ppnext/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"okki.hu/garric/ppnext/model"
 )
 
 const MongoDatabase = "ppnext"  // mongodb database name

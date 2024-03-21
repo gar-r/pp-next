@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gar-r/ppnext/config"
+	"github.com/gar-r/ppnext/model"
+	"github.com/gar-r/ppnext/viewmodel"
 	"github.com/gin-gonic/gin"
-	"okki.hu/garric/ppnext/config"
-	"okki.hu/garric/ppnext/model"
-	"okki.hu/garric/ppnext/viewmodel"
 )
 
 // ShowLogin sends the login page template to the client, and

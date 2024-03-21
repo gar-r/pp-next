@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"okki.hu/garric/ppnext/config"
+	"github.com/gar-r/ppnext/config"
 )
 
 func scheduleBackgroundCleanup() {

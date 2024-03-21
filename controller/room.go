@@ -3,9 +3,9 @@ package controller
 import (
 	"net/http"
 
+	"github.com/gar-r/ppnext/config"
+	"github.com/gar-r/ppnext/model"
 	"github.com/gin-gonic/gin"
-	"okki.hu/garric/ppnext/config"
-	"okki.hu/garric/ppnext/model"
 )
 
 func DisplayRoom(c *gin.Context) {
