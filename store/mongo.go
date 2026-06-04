@@ -121,11 +121,11 @@ func (m *MongoRepository) RoomCount() (int, error) {
 
 func (m *MongoRepository) UserCount() (int, error) {
 	pipeline := []interface{}{
-		bson.D{{"$project", bson.D{{"votes", bson.D{{"$objectToArray", "$votes"}}}}}},
-		bson.D{{"$project", bson.D{{"user", "$votes.k"}}}},
-		bson.D{{"$unwind", "$user"}},
-		bson.D{{"$group", bson.D{{"_id", "$user"}}}},
-		bson.D{{"$count", "count"}},
+		bson.D{{Key: "$project", Value: bson.D{{Key: "votes", Value: bson.D{{Key: "$objectToArray", Value: "$votes"}}}}}},
+		bson.D{{Key: "$project", Value: bson.D{{Key: "user", Value: "$votes.k"}}}},
+		bson.D{{Key: "$unwind", Value: "$user"}},
+		bson.D{{Key: "$group", Value: bson.D{{Key: "_id", Value: "$user"}}}},
+		bson.D{{Key: "$count", Value: "count"}},
 	}
 	cur, err := m.rooms().Aggregate(context.Background(), pipeline)
 	if err != nil {
